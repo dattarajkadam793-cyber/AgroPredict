@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Harvest Result</title>
+
+    <style>
+        :root {
+            --green-dark: #2e7d32;
+            --green-mid: #43a047;
+            --green-light: #e8f5e9;
+            --white: #ffffff;
+            --text-dark: #2f2f2f;
+
+            --shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+            --shadow-hover: 0 8px 22px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--green-light);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: var(--text-dark);
+        }
+
+        .container {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            color: var(--green-dark);
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        span {
+            color: var(--green-dark);
+            font-weight: bold;
+        }
+
+        /* ===== NEXT BUTTON ===== */
+        .next-btn-wrap {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .next-btn {
+            display: inline-block;
+            background: var(--green-dark);
+            color: var(--white);
+            text-decoration: none;
+            padding: 13px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .next-btn:hover {
+            background: var(--green-mid);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Prediction</h2>
+
+        <p>Harvest Decision: <span th:text="${result}"></span></p>
+
+        <div class="next-btn-wrap">
+            <a href="/harvestForm" class="next-btn">Go Back</a>
+        </div>
+    </div>
+</body>
+</html>

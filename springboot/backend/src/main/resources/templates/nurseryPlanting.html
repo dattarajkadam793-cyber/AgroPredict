@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sugarcane Nursery Transplanting</title>
+
+<style>
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== BODY ===== */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7f4;
+    color: #333;
+    line-height: 1.6;
+
+     background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 20px;
+            min-height: 100vh;
+}
+
+/* ===== HERO ===== */
+.hero {
+    background: linear-gradient(135deg, #1b5e20, #2e7d32);
+    color: #ffffff;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+}
+
+.hero p {
+    font-size: 1.15rem;
+    opacity: 0.95;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 15px;
+
+                max-width: 1200px;
+            margin: 0 auto;
+            background: #f1f8f4;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+
+}
+
+h2 {
+            text-align: center;
+            color: #1b5e20;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .steps-subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 35px;
+            font-size: 16px;
+        }
+
+/* ===== TABS ===== */
+.tabs {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    background: #ffffff;
+    border: 1px solid #4caf50;
+    padding: 11px 24px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #2e7d32;
+    border-radius: 25px;
+    transition: 0.2s ease;
+}
+
+.tab-btn:hover {
+    background: #e8f5e9;
+}
+
+.tab-btn.active {
+    background: #2e7d32;
+    color: #ffffff;
+    border-color: #2e7d32;
+}
+
+/* ===== TAB CONTENT ===== */
+.tab-content {
+    display: none;
+    background: #ffffff;
+    padding: 35px 30px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content h2 {
+    text-align: center;
+    color: #1b5e20;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    position: relative;
+}
+
+.tab-content h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #66bb6a;
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+/* ===== SPACING SECTION ===== */
+.spacing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+    margin-top: 30px;
+}
+
+.spacing-box {
+    background: #f9fbf9;
+    border: 1px solid #c8e6c9;
+    padding: 28px 22px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.spacing-box h3 {
+    margin-bottom: 10px;
+    color: #2e7d32;
+    font-size: 1.15rem;
+}
+
+.value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1b5e20;
+}
+
+/* STEPS GRID */
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.steps-subtitle {
+    text-align: center;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.step-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+}
+
+.step-card .icon {
+    font-size: 34px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.step-card h3 {
+    color: #1b5e20;
+    font-size: 18px;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 14px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    animation: scaleIn 0.3s ease;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+    font-weight: bold;
+            line-height: 1;
+}
+ .close-btn:hover {
+            color: #d32f2f;
+        }
+
+.modal-content h3 {
+    color: #1b5e20;
+    margin-bottom: 15px;
+    padding-right: 30px;
+}
+
+.modal-content ul {
+    padding-left: 20px;
+}
+
+.modal-content li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+    color: #333;
+}
+.modal-content strong {
+            color: #d32f2f;
+        }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+.steps-grid {
+    grid-template-columns: 1fr;
+}
+
+.container {
+    padding: 20px;
+}
+
+h2 {
+    font-size: 26px;
+ }
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background: #1b5e20;
+    color: #e8f5e9;
+    text-align: center;
+    padding: 25px 15px;
+    margin-top: 50px;
+    font-size: 0.95rem;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .tab-content {
+        padding: 25px 20px;
+    }
+}
+
+/* ===== CALCULATOR TAB ===== */
+.calculator-card {
+    max-width: 500px;
+    margin: 0 auto;
+    background: #f9fbf9;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: 1px solid #c8e6c9;
+}
+
+.calculator-card h3 {
+    text-align: center;
+    color: #1b5e20;
+    margin-bottom: 15px;
+}
+
+.calculator-card p {
+    text-align: center;
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.calculator-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2e7d32;
+}
+
+.calculator-form input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+.calculator-form button {
+    width: 100%;
+    padding: 12px;
+    background: #2e7d32;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.calculator-form button:hover {
+    background: #1b5e20;
+}
+
+.result {
+    margin-top: 20px;
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 10px;
+    display: none;
+}
+
+.result p {
+    margin-bottom: 8px;
+    color: #1b5e20;
+}
+
+.note {
+    color: #d32f2f;
+    font-size: 14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <h1>🌱 Sugarcane Nursery Transplanting</h1>
+    <p>Professional Guide for Modern Farmers</p>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+    
+    <!-- INTERACTIVE TABS -->
+    <div class="tabs">
+        <button class="tab-btn" onclick="openTab(event, 'calculatorTab')">🧮 Nursery Calculator</button>
+        <button class="tab-btn active" onclick="openTab(event, 'spacing')">📏 Spacing</button>
+        <button class="tab-btn" onclick="openTab(event, 'steps')">🔄 Steps</button>
+
+        
+    <div class="NextStageButton" onclick="NextStage()">
+        <button>Next Stage</button>
+    </div>
+
+
+
+
+        <!-- <button class="tab-btn" onclick="openTab(event, 'timeline')">⏱️ Timeline</button>
+        <button class="tab-btn" onclick="openTab(event, 'care')">🛡️ Care Tips</button> -->
+    </div>
+
+    <!-- TAB 5: NURSERY CALCULATOR -->
+<div id="calculatorTab" class="tab-content">
+
+    <h2>Nursery Plant Calculator</h2>
+    <p class="steps-subtitle">
+        Estimate required nursery plants and cost based on land area
+    </p>
+
+    <div class="calculator-card">
+        <h3>🌱 Nursery Planting Method</h3>
+        <p>
+            In nursery planting, sugarcane buds are raised separately and
+            healthy seedlings are transplanted into the main field.
+            This improves survival rate and ensures uniform crop growth.
+        </p>
+
+        <div class="calculator-form">
+            <label for="landArea">Land Area (in acres)</label>
+            <input type="number" id="landArea" placeholder="Enter land area (e.g. 0.25)" step="0.01">
+
+            <button id="calculateBtn">Calculate</button>
+
+            <div class="result" id="result">
+                <p><strong>Required Nursery Plants:</strong> <span id="plants"></span></p>
+                <p><strong>Cost per Plant:</strong> ₹ <span id="costPerPlant"></span></p>
+                <p><strong>Total Cost:</strong> ₹ <span id="totalCost"></span></p>
+                <p class="note" id="note"></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <!-- TAB 1: SPACING -->
+    <div id="spacing" class="tab-content active">
+        <div class="spacing-visual">
+            <h2 style="color: #2d5016; margin-bottom: 20px; font-size: 2em;">Optimal Spacing Configuration</h2>
+            <div class="spacing-grid">
+                <div class="spacing-box">
+                    <h3>Row Spacing</h3>
+                    <div class="value">5 ft</div>
+                    <p style="margin-top: 10px; color: #666;">Between rows</p>
+                </div>
+                <div class="spacing-box">
+                    <h3>Plant Spacing</h3>
+                    <div class="value">2 ft</div>
+                    <p style="margin-top: 10px; color: #666;">Between plants</p>
+                </div>
+                <div class="spacing-box">
+                    <h3>Seedling Age</h3>
+                    <div class="value">25-30</div>
+                    <p style="margin-top: 10px; color: #666;">Days old</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+ <!-- TAB 2: STEPS WITH CLICKABLE CARDS -->
+<div id="steps" class="tab-content">
+    <h2>Transplanting Process</h2>
+    <p class="steps-subtitle">Click on a step to view detailed guidelines</p>
+
+    <div class="steps-grid">
+        <div class="step-card" onclick="openModal('step1')">
+            <span class="icon">🌱</span>
+            <h3>Step 1: Right Stage for Transplanting</h3>
+        </div>
+
+        <div class="step-card" onclick="openModal('step2')">
+            <span class="icon">🚜</span>
+            <h3>Step 2: Field Preparation</h3>
+        </div>
+
+        <div class="step-card" onclick="openModal('step3')">
+            <span class="icon">🌾</span>
+            <h3>Step 3: Nursery Plant Uprooting</h3>
+        </div>
+
+        <div class="step-card" onclick="openModal('step4')">
+            <span class="icon">🌿</span>
+            <h3>Step 4: Transplanting Method</h3>
+        </div>
+
+        <div class="step-card" onclick="openModal('step5')">
+            <span class="icon">📏</span>
+            <h3>Step 5: Depth of Planting</h3>
+        </div>
+
+        <div class="step-card" onclick="openModal('step6')">
+            <span class="icon">💧</span>
+            <h3>Step 6: Irrigation</h3>
+        </div>
+
+        <div class="step-card" onclick="openModal('step7')">
+            <span class="icon">🔁</span>
+            <h3>Step 7: Gap Filling</h3>
+        </div>
+
+        <div class="step-card" onclick="openModal('step8')">
+            <span class="icon">🌿</span>
+            <h3>Step 8: Fertilizer Management</h3>
+        </div>
+
+        <div class="step-card" onclick="openModal('step9')">
+            <span class="icon">🌾</span>
+            <h3>Step 9: Weed Management</h3>
+        </div>
+
+        <div class="step-card" onclick="openModal('step10')">
+            <span class="icon">🛡️</span>
+            <h3>Step 10: Plant Protection</h3>
+        </div>
+    </div>
+</div>
+
+<div id="stepModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+</div>
+
+<footer>
+    <p>🌱 Sugarcane Best Practices | Empowering Farmers with Knowledge</p>
+</footer>
+
+<script>
+function openTab(evt, tabName) {
+    const tabContents = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove("active");
+    }
+    
+    const tabBtns = document.getElementsByClassName("tab-btn");
+    for (let i = 0; i < tabBtns.length; i++) {
+        tabBtns[i].classList.remove("active");
+    }
+    
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+}
+
+const stepDetails = {
+    step1: `
+        <h3>Right Stage for Transplanting</h3>
+        <ul>
+            <li>Transplant seedlings 25–30 days after germination</li>
+            <li>2–3 healthy green leaves</li>
+            <li>Strong white, well-developed roots</li>
+            <li>Seedling height: 30–40 cm</li>
+            <li><strong>Avoid seedlings older than 35 days</strong></li>
+        </ul>
+    `,
+    step2: `
+        <h3>Field Preparation</h3>
+        <ul>
+            <li>Plough land 2–3 times</li>
+            <li>Level the field properly</li>
+            <li>Prepare furrows at 5 ft spacing</li>
+            <li>Furrow depth: 20–25 cm</li>
+        </ul>
+    `,
+    step3: `
+        <h3>Nursery Plant Uprooting</h3>
+        <ul>
+            <li>Irrigate nursery bed one day before uprooting</li>
+            <li>Uproot carefully with root ball intact</li>
+            <li>Avoid forceful pulling</li>
+            <li>Select only healthy, disease-free seedlings</li>
+        </ul>
+    `,
+    step4: `
+        <h3>Transplanting Method</h3>
+        <ul>
+            <li>Place seedlings upright in furrows</li>
+            <li>Maintain 2 ft plant-to-plant spacing</li>
+            <li>Plant one seedling per hill</li>
+            <li>Cover roots gently, do not bury leaves</li>
+        </ul>
+    `,
+    step5: `
+        <h3>Depth of Planting</h3>
+        <ul>
+            <li>Ideal depth: 5–7 cm</li>
+            <li>Too deep → slow growth</li>
+            <li>Too shallow → roots may dry</li>
+        </ul>
+    `,
+    step6: `
+        <h3>Irrigation After Transplanting</h3>
+        <ul>
+            <li>Provide light irrigation immediately</li>
+            <li>Avoid water stagnation</li>
+            <li>First 7 days are critical</li>
+        </ul>
+    `,
+    step7: `
+        <h3>Gap Filling</h3>
+        <ul>
+            <li>Check field after 7–10 days</li>
+            <li>Replace dead or weak plants</li>
+            <li>Use extra nursery seedlings</li>
+        </ul>
+    `,
+    step8: `
+        <h3>Fertilizer Management</h3>
+        <ul>
+            <li>Apply FYM or compost as basal dose</li>
+            <li>First nitrogen dose after 10–15 days</li>
+            <li>Avoid heavy urea on first day</li>
+        </ul>
+    `,
+    step9: `
+        <h3>Weed Management</h3>
+        <ul>
+            <li>First hand weeding at 20–25 days</li>
+            <li>Keep field weed-free initially</li>
+            <li>Mulching reduces weeds & moisture loss</li>
+        </ul>
+    `,
+    step10: `
+        <h3>Plant Protection</h3>
+        <ul>
+            <li>Treat seedlings with Trichoderma / bio-fungicide</li>
+            <li>Monitor termites and early shoot borer</li>
+            <li>Avoid water stress</li>
+        </ul>
+    `
+};
+
+function openModal(step) {
+    document.getElementById("modalBody").innerHTML = stepDetails[step];
+    document.getElementById("stepModal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("stepModal").style.display = "none";
+}
+
+
+document.getElementById("calculateBtn").addEventListener("click", function () {
+    const area = parseFloat(document.getElementById("landArea").value);
+
+    if (!area || area <= 0) {
+        document.getElementById("note").innerText = "Please enter a valid land area.";
+        document.getElementById("result").style.display = "block";
+        return;
+    }
+
+    const plantsPerAcre = 4356; // 5ft x 2ft spacing approx
+    const costPerPlant = 2.5;
+
+    const totalPlants = Math.round(area * plantsPerAcre);
+    const totalCost = totalPlants * costPerPlant;
+
+    document.getElementById("plants").innerText = totalPlants;
+    document.getElementById("costPerPlant").innerText = costPerPlant;
+    document.getElementById("totalCost").innerText = totalCost;
+    document.getElementById("note").innerText = "";
+
+    document.getElementById("result").style.display = "block";
+});
+
+
+
+  function NextStage(){
+    window.location.href="/stage2";
+  }
+
+<!--    dattaraj-->
+
+window.chatbotConfig = {
+  position: "bottom-right",
+  preprompt: "User is on sugarcane planting stage page. Answer only about planting, spacing, irrigation, fertilizers.Planting by nursery method"
+};
+
+
+</script>
+<link rel="stylesheet" href="/css/chatBotcss.css">
+
+<!-- STEP 3: Load JS -->
+<script src="/js/chatBotjs.js"></script>
+</body>
+</html>

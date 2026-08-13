@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Soil Crop Prediction</title>
+
+    <style>
+        :root {
+            --green-dark: #2e7d32;
+            --green-header: #388e3c;
+            --green-light-bg: #eef3ef;
+            --card-bg: #f6f8f6;
+            --border-light: #c8e6c9;
+            --text-dark: #1b3c2f;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-hover: 0 6px 16px rgba(0,0,0,0.12);
+        }
+
+        /* ✅ FIXED BODY */
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--green-light-bg);
+            margin: 0;
+        }
+
+        /* ✅ NEW WRAPPER (centers only content, not header) */
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: var(--text-dark);
+            font-size: 30px;
+        }
+
+        .form-box {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            width: 700px;
+            max-width: 95%;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form {
+            width: 360px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--text-dark);
+        }
+
+        select,
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 18px 0;
+            border-radius: 8px;
+            border: 1px solid #d0d7d0;
+            font-size: 15px;
+            background: #ffffff;
+        }
+
+        button {
+            background: var(--green-header);
+            color: var(--white);
+            padding: 13px;
+            border: none;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        button:hover {
+            background: var(--green-dark);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .home-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .home-container button {
+            background: var(--green-header);
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .home-container button:hover {
+            background: var(--green-dark);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ✅ HEADER (unchanged) -->
+<div th:replace="~{fragments/header :: header(false)}"></div>
+
+<!-- ✅ CONTENT WRAPPER -->
+<div class="content">
+
+    <!-- Home button -->
+    <div class="home-container">
+        <a href="/"><button>Home</button></a>
+    </div>
+
+    <h2>Enter Soil Details</h2>
+
+    <div class="form-box">
+        <form action="/predict" method="POST">
+
+            <label>Soil Color:</label>
+            <select name="soilColor" required>
+                <option value="Black">Black</option>
+                <option value="Red">Red</option>
+                <option value="Medium Brown">Medium Brown</option>
+                <option value="Dark Brown">Dark Brown</option>
+                <option value="Light Brown">Light Brown</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label>Nitrogen:</label>
+            <input type="number" name="Nitrogen" required>
+
+            <label>Phosphorus:</label>
+            <input type="number" name="Phosphorus" required>
+
+            <label>Potassium:</label>
+            <input type="number" name="potassium" required>
+
+            <label>pH:</label>
+            <input type="number" name="pH" step="0.1" required>
+
+            <label>Rainfall (mm):</label>
+            <input type="number" name="Rainfall" required>
+
+            <label>Temperature:</label>
+            <input type="number" name="Temperature" required>
+
+            <button type="submit">Predict</button>
+
+        </form>
+    </div>
+
+</div>
+
+<!-- Chatbot config -->
+<script>
+<!--    window.chatbotConfig = {-->
+<!--      position: "top-right",-->
+<!--      preprompt: "User is on soil form guide him to put soil data like pH, N, P, K."-->
+<!--    }-->
+
+<!--    // chatbot -->
+<!--function toggleChat() {-->
+<!--  const chatbox = document.getElementById("chatbox");-->
+
+<!--  if (chatbox.style.display === "block") {-->
+<!--    chatbox.style.display = "none";-->
+<!--  } else {-->
+<!--    chatbox.style.display = "block";-->
+<!--  }-->
+<!--}-->
+
+</script>
+
+<!--<link rel="stylesheet" href="/css/chatBotcss.css">-->
+<!--<script src="/js/chatBotjs.js"></script>-->
+
+</body>
+</html>

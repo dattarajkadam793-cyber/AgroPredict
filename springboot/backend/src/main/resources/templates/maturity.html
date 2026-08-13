@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maturity Stage IV</title>
+    <style>
+
+        /* ===== COLOR VARIABLES — Green & White Theme ===== */
+        :root {
+            --green:        #2e7d32;
+            --green-dark:   #1b5e20;
+            --green-mid:    #388e3c;
+            --green-light:  #4caf50;
+            --green-pale:   #e8f5e9;
+            --green-bg:     #f1f8f1;
+            --white:        #ffffff;
+            --border:       #c8e6c9;
+            --text:         #1c2b1e;
+            --text-mid:     #4a6350;
+            --shadow:       0 6px 24px rgba(46,125,50,0.13);
+            --shadow-hover: 0 14px 40px rgba(46,125,50,0.20);
+        }
+
+        /* ===== RESET & BASE ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--green-bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 16px;
+        }
+
+        /* ===== PAGE WRAPPER — FULL SCREEN ===== */
+        .page-wrapper {
+            width: 100%;
+            max-width: 100%;
+            padding: 2rem 3rem;
+        }
+
+        /* ===== HERO BANNER ===== */
+        .page-hero {
+            background: var(--green-dark);
+            border-radius: 14px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--green-light);
+            color: var(--white);
+            font-size: 13px;
+            font-weight: bold;
+            padding: 5px 16px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            letter-spacing: 0.06em;
+        }
+
+        .page-hero h1 {
+            color: var(--white);
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-hero p {
+            color: var(--green-pale);
+            font-size: 17px;
+        }
+
+        .hero-pills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .hero-pill {
+            background: rgba(255,255,255,0.12);
+            color: var(--white);
+            border: 1px solid rgba(200,230,201,0.5);
+            font-size: 14px;
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+
+        /* ===== TAB NAVIGATION ===== */
+        .tab-nav {
+            display: flex;
+            gap: 6px;
+            background: var(--green-pale);
+            border-radius: 12px;
+            padding: 6px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 8px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--green-dark);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--green-dark);
+            color: var(--white);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: var(--border);
+        }
+
+        /* ===== TAB PANELS ===== */
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--green-dark);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        /* ===== BASIC INFO PANEL: Info Cards Grid ===== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .info-card {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 18px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .info-card:hover {
+            border-color: var(--green-mid);
+            background: var(--green-pale);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .info-card.expanded {
+            border-color: var(--green-dark);
+            background: var(--green-pale);
+        }
+
+        .info-card-icon { font-size: 28px; margin-bottom: 10px; }
+
+        .info-card h3 {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--green-dark);
+            margin-bottom: 6px;
+        }
+
+        .info-card p {
+            font-size: 14px;
+            color: var(--text-mid);
+            line-height: 1.5;
+        }
+
+        /* ===== POPUP MODAL ===== */
+
+        /* Dark background overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        /* The white popup box */
+        .modal-box {
+            background: var(--white);
+            border-radius: 16px;
+            width: 480px;
+            max-width: 92vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            overflow: hidden;
+            animation: popIn 0.2s ease;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.93); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        /* Green header bar inside popup */
+        .modal-head {
+            background: var(--green-dark);
+            color: var(--white);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-head-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-head-icon { font-size: 22px; }
+
+        .modal-head-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* X close button */
+        .modal-close {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: var(--white);
+            font-size: 18px;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            line-height: 32px;
+            text-align: center;
+        }
+
+        .modal-close:hover { background: rgba(255,255,255,0.28); }
+
+        /* Points list inside popup */
+        .modal-points { padding: 6px 0; }
+
+        .modal-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 13px 20px;
+            border-bottom: 1px solid var(--green-pale);
+            transition: background 0.15s;
+        }
+
+        .modal-point:last-child { border-bottom: none; }
+        .modal-point:hover { background: var(--green-pale); }
+
+        .modal-point-num {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: var(--green-pale);
+            border: 2px solid var(--green-mid);
+            color: var(--green-dark);
+            font-size: 13px;
+            font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .modal-point-text {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.65;
+            padding-top: 2px;
+        }
+
+        /* ===== FARMER GUIDE PANEL ===== */
+        .do-dont-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 520px) {
+            .do-dont-grid { grid-template-columns: 1fr; }
+        }
+
+        .do-card {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-left: 5px solid var(--green-mid);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .dont-card {
+            background: var(--white);
+            border: 1.5px solid #ffcccc;
+            border-left: 5px solid #cc3333;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .do-card h3 {
+            font-size: 17px;
+            font-weight: bold;
+            color: var(--green-dark);
+            margin-bottom: 16px;
+        }
+
+        .dont-card h3 {
+            font-size: 17px;
+            font-weight: bold;
+            color: #cc3333;
+            margin-bottom: 16px;
+        }
+
+        .action-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .dot-green {
+            width: 9px; height: 9px; border-radius: 50%;
+            background: var(--green-mid); margin-top: 6px; flex-shrink: 0;
+        }
+
+        .dot-red {
+            width: 9px; height: 9px; border-radius: 50%;
+            background: #cc3333; margin-top: 6px; flex-shrink: 0;
+        }
+
+        .action-item strong {
+            display: block;
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .action-item span {
+            font-size: 14px;
+            color: var(--text-mid);
+            line-height: 1.6;
+        }
+
+        /* ===== IMPORTANCE PANEL ===== */
+        .importance-list { list-style: none; }
+
+        .importance-list-wrap {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .importance-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--green-pale);
+        }
+
+        .importance-item:last-child { border-bottom: none; }
+
+        .imp-num {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--green-dark); color: var(--white);
+            font-size: 15px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-top: 2px;
+        }
+
+        .imp-text h4 {
+            font-size: 17px;
+            font-weight: bold;
+            color: var(--green-dark);
+            margin-bottom: 5px;
+        }
+
+        .imp-text p {
+            font-size: 15px;
+            color: var(--text-mid);
+            line-height: 1.7;
+        }
+
+        /* ===== BRIX PANEL ===== */
+        .brix-table-wrap {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.4rem;
+            box-shadow: var(--shadow);
+        }
+
+        .brix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        .brix-table th {
+            background: var(--green-dark);
+            color: var(--white);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .brix-table td {
+            padding: 13px 16px;
+            border-bottom: 1px solid var(--green-pale);
+            color: var(--text);
+            font-size: 15px;
+        }
+
+        .brix-table tr:last-child td { border-bottom: none; }
+        .brix-table tr:nth-child(even) td { background: var(--green-pale); }
+
+        .status-badge {
+            font-size: 13px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .status-early { background: var(--green-pale);  color: var(--green-mid); }
+        .status-dev   { background: #c8e6c9;            color: var(--green-dark); }
+        .status-near  { background: var(--green-light); color: var(--white); }
+        .status-full  { background: var(--green-dark);  color: var(--white); }
+
+        .brix-bars-wrap {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 1.4rem;
+            box-shadow: var(--shadow);
+        }
+
+        .brix-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .brix-bar-row:last-child { margin-bottom: 0; }
+
+        .brix-bar-label {
+            font-size: 15px;
+            color: var(--text-mid);
+            width: 110px;
+            flex-shrink: 0;
+        }
+
+        .brix-bar-track {
+            flex: 1; height: 14px;
+            background: var(--green-pale);
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .brix-bar-fill { height: 100%; border-radius: 7px; background: var(--green-mid); }
+
+        .brix-bar-val {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--green-dark);
+            width: 55px;
+        }
+
+        .brix-ideal-box {
+            background: var(--green-pale);
+            border: 1.5px solid var(--border);
+            border-left: 5px solid var(--green-mid);
+            border-radius: 12px;
+            padding: 18px 20px;
+        }
+
+        .brix-ideal-box p:first-child {
+            font-size: 15px;
+            color: var(--green-dark);
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .brix-ideal-box .brix-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--green-dark);
+            margin-bottom: 6px;
+        }
+
+        .brix-ideal-box small {
+            font-size: 14px;
+            color: var(--text-mid);
+        }
+
+        /* ===== NEXT BUTTON ===== */
+        .next-btn-wrap {
+            text-align: right;
+            margin-top: 2rem;
+        }
+
+        .next-btn {
+            display: inline-block;
+            background: var(--green-dark);
+            color: var(--white);
+            text-decoration: none;
+            padding: 13px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .next-btn:hover {
+            background: var(--green-mid);
+            box-shadow: var(--shadow-hover);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <!-- HERO BANNER -->
+    <div class="page-hero">
+        <div class="hero-badge">Sugarcane Growth</div>
+        <h1>Stage IV &mdash; Maturity</h1>
+        <p>Sugar accumulation, harvest readiness &amp; crop management</p>
+        <div class="hero-pills">
+            <span class="hero-pill">12&ndash;16 months</span>
+            <span class="hero-pill">Co-86032 variety</span>
+            <span class="hero-pill">20&ndash;23&deg; Brix ideal</span>
+        </div>
+    </div>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('basic', this)">Basic Info</button>
+        <button class="tab-btn" onclick="switchTab('farmer', this)">Farmer Guide</button>
+        <button class="tab-btn" onclick="switchTab('importance', this)">Importance</button>
+        <button class="tab-btn" onclick="switchTab('brix', this)">Brix Values</button>
+    </div>
+
+    <!-- TAB 1: BASIC INFO -->
+    <div id="tab-basic" class="tab-panel active">
+        <p class="section-label">Click any card to view details</p>
+
+        <div class="info-grid">
+            <div class="info-card" onclick="openModal('c1')">
+                <div class="info-card-icon">🎋</div>
+                <h3>Sugar Accumulation</h3>
+                <p>Rapid sucrose increase in stalks</p>
+            </div>
+            <div class="info-card" onclick="openModal('c2')">
+                <div class="info-card-icon">📉</div>
+                <h3>Growth Slows Down</h3>
+                <p>Energy shifts to sugar storage</p>
+            </div>
+            <div class="info-card" onclick="openModal('c3')">
+                <div class="info-card-icon">🍂</div>
+                <h3>Leaves Begin to Dry</h3>
+                <p>Lower leaves yellow naturally</p>
+            </div>
+            <div class="info-card" onclick="openModal('c4')">
+                <div class="info-card-icon">💧</div>
+                <h3>Reduced Water Content</h3>
+                <p>Stalk hardens, juice improves</p>
+            </div>
+            <div class="info-card" onclick="openModal('c5')">
+                <div class="info-card-icon">🌡️</div>
+                <h3>Environmental Influence</h3>
+                <p>Cool nights aid sugar buildup</p>
+            </div>
+            <div class="info-card" onclick="openModal('c6')">
+                <div class="info-card-icon">⚗️</div>
+                <h3>Chemical Changes</h3>
+                <p>Sucrose rises, reducing sugars fall</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- POPUP MODAL (one modal shared by all 6 cards) -->
+    <div id="card-modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-box">
+            <div class="modal-head">
+                <div class="modal-head-left">
+                    <span class="modal-head-icon" id="modal-icon"></span>
+                    <span class="modal-head-title" id="modal-title"></span>
+                </div>
+                <button class="modal-close" onclick="document.getElementById('card-modal').classList.remove('open')">&#10005;</button>
+            </div>
+            <div class="modal-points" id="modal-points"></div>
+        </div>
+    </div>
+
+    <!-- TAB 2: FARMER GUIDE -->
+    <div id="tab-farmer" class="tab-panel">
+        <div class="do-dont-grid">
+
+            <div class="do-card">
+                <h3>&#10003; Do&rsquo;s &mdash; Best Practices</h3>
+
+                <div class="action-item">
+                    <div class="dot-green"></div>
+                    <div>
+                        <strong>Monitor Brix levels</strong>
+                        <span>Regularly check sugar content using a refractometer. Uniform top and bottom Brix reading = mature cane.</span>
+                    </div>
+                </div>
+
+                <div class="action-item">
+                    <div class="dot-green"></div>
+                    <div>
+                        <strong>Prevent flowering</strong>
+                        <span>Avoid conditions that trigger tasselling. Flowering shifts energy away from sugar storage and reduces yield.</span>
+                    </div>
+                </div>
+
+                <div class="action-item">
+                    <div class="dot-green"></div>
+                    <div>
+                        <strong>Remove weeds</strong>
+                        <span>Keep the field clean. Weeds compete for soil moisture and interfere with harvesting equipment.</span>
+                    </div>
+                </div>
+
+                <div class="action-item">
+                    <div class="dot-green"></div>
+                    <div>
+                        <strong>Clean the crop</strong>
+                        <span>Remove lodged or broken canes. These are prone to rot, pest attacks, and lower sugar quality.</span>
+                    </div>
+                </div>
+
+                <div class="action-item">
+                    <div class="dot-green"></div>
+                    <div>
+                        <strong>Coordinate with factories</strong>
+                        <span>Contact your local sugar factory to align harvest timing with their crushing season schedule.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dont-card">
+                <h3>&#10007; Don&rsquo;ts &mdash; What to Stop</h3>
+
+                <div class="action-item">
+                    <div class="dot-red"></div>
+                    <div>
+                        <strong>Stop nitrogen application</strong>
+                        <span>Late nitrogen promotes vegetative growth and tillering, which depletes stored sugar and delays maturity.</span>
+                    </div>
+                </div>
+
+                <div class="action-item">
+                    <div class="dot-red"></div>
+                    <div>
+                        <strong>Stop all fertilizers</strong>
+                        <span>Fertilizer application should stop well before harvest to let the plant focus on sucrose accumulation.</span>
+                    </div>
+                </div>
+
+                <div class="action-item">
+                    <div class="dot-red"></div>
+                    <div>
+                        <strong>Stop irrigation</strong>
+                        <span>Stop watering 15&ndash;20 days before harvest. This water stress forces the plant into ripening mode and concentrates sugar.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TAB 3: IMPORTANCE -->
+    <div id="tab-importance" class="tab-panel">
+        <div class="importance-list-wrap">
+            <ul class="importance-list">
+
+                <li class="importance-item">
+                    <div class="imp-num">1</div>
+                    <div class="imp-text">
+                        <h4>Sucrose Accumulation</h4>
+                        <p>Sucrose content rises while reducing sugars decline 12&ndash;16 months after planting, optimizing sugar yield and quality.</p>
+                    </div>
+                </li>
+
+                <li class="importance-item">
+                    <div class="imp-num">2</div>
+                    <div class="imp-text">
+                        <h4>Slowed Vegetative Growth</h4>
+                        <p>Energy shifts from biomass growth to sucrose storage, enhancing stalk sweetness.</p>
+                    </div>
+                </li>
+
+                <li class="importance-item">
+                    <div class="imp-num">3</div>
+                    <div class="imp-text">
+                        <h4>Lower Part Ripens First</h4>
+                        <p>Maturation starts from bottom internodes upward, aiding selective harvesting decisions.</p>
+                    </div>
+                </li>
+
+                <li class="importance-item">
+                    <div class="imp-num">4</div>
+                    <div class="imp-text">
+                        <h4>Optimal Harvest Timing</h4>
+                        <p>Monitoring stalk thickness, color, and sucrose content ensures maximum sugar recovery from every harvest.</p>
+                    </div>
+                </li>
+
+                <li class="importance-item">
+                    <div class="imp-num">5</div>
+                    <div class="imp-text">
+                        <h4>Synergistic Contribution</h4>
+                        <p>Physiological development and practical management together maximize final yield and quality.</p>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <!-- TAB 4: BRIX VALUES -->
+    <div id="tab-brix" class="tab-panel">
+
+        <p style="font-size:15px; color:#4a6350; margin-bottom:16px; line-height:1.7;">
+            <strong>What is Brix:</strong> Brix is the measurement of total soluble solids (mainly sugar) in sugarcane juice. Higher Brix indicates higher sugar content and maturity.
+        </p>
+
+        <div class="brix-table-wrap">
+            <table class="brix-table">
+                <tr>
+                    <th>Crop Age</th>
+                    <th>Brix Value</th>
+                    <th>Maturity Status</th>
+                </tr>
+                <tr>
+                    <td>8&ndash;9 months</td>
+                    <td>16&ndash;18 &deg;Brix</td>
+                    <td><span class="status-badge status-early">Early maturity</span></td>
+                </tr>
+                <tr>
+                    <td>9&ndash;10 months</td>
+                    <td>18&ndash;20 &deg;Brix</td>
+                    <td><span class="status-badge status-dev">Developing maturity</span></td>
+                </tr>
+                <tr>
+                    <td>10&ndash;11 months</td>
+                    <td>20&ndash;22 &deg;Brix</td>
+                    <td><span class="status-badge status-near">Near maturity</span></td>
+                </tr>
+                <tr>
+                    <td>11&ndash;12 months</td>
+                    <td>21&ndash;23 &deg;Brix</td>
+                    <td><span class="status-badge status-full">Full maturity</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <p class="section-label">Brix distribution along the cane</p>
+        <div class="brix-bars-wrap">
+            <div class="brix-bar-row">
+                <span class="brix-bar-label">Top portion</span>
+                <div class="brix-bar-track">
+                    <div class="brix-bar-fill" style="width: 30%; background: #c8e6c9;"></div>
+                </div>
+                <span class="brix-bar-val">Low</span>
+            </div>
+            <div class="brix-bar-row">
+                <span class="brix-bar-label">Middle portion</span>
+                <div class="brix-bar-track">
+                    <div class="brix-bar-fill" style="width: 60%;"></div>
+                </div>
+                <span class="brix-bar-val">Medium</span>
+            </div>
+            <div class="brix-bar-row">
+                <span class="brix-bar-label">Bottom portion</span>
+                <div class="brix-bar-track">
+                    <div class="brix-bar-fill" style="width: 95%; background: #1b5e20;"></div>
+                </div>
+                <span class="brix-bar-val">High</span>
+            </div>
+        </div>
+
+        <div class="brix-ideal-box">
+            <p>Ideal Brix for Harvesting (Co-86032)</p>
+            <p class="brix-number">20&deg; &ndash; 23&deg; Brix</p>
+            <small>Optimum maturity is reached between 10 to 12 months</small>
+        </div>
+
+    </div>
+
+    <!-- NEXT BUTTON -->
+    <div class="next-btn-wrap">
+        <a href="/stage5" class="next-btn">Next Stage &rarr;</a>
+    </div>
+
+</div><!-- end .page-wrapper -->
+
+<script>
+
+/* ---- All card data in one place ---- */
+var cardData = {
+    c1: { icon: "🎋", title: "Sugar Accumulation", points: [
+        "Rapid increase in sucrose content in the stalk.",
+        "Conversion of glucose and fructose into stored sugar.",
+        "Maximum sugar concentration in middle and lower internodes.",
+        "Juice becomes sweeter and more concentrated."
+    ]},
+    c2: { icon: "📉", title: "Growth Slows Down", points: [
+        "Increase in height and girth stops.",
+        "No new leaves or internodes are formed.",
+        "Plant shifts energy from growth to sugar storage."
+    ]},
+    c3: { icon: "🍂", title: "Leaves Begin to Dry", points: [
+        "Lower leaves turn yellow and dry.",
+        "Top leaves remain green for some time.",
+        "Drying is natural and indicates maturity.",
+        "Sugar content reaches maximum — cane becomes hard and heavy, ready for harvesting."
+    ]},
+    c4: { icon: "💧", title: "Reduced Water Content", points: [
+        "Moisture content in cane decreases.",
+        "Stalk becomes harder and more fibrous.",
+        "Juice quality improves with higher sugar concentration."
+    ]},
+    c5: { icon: "🌡️", title: "Environmental Influence", points: [
+        "Cool nights help increase sugar accumulation.",
+        "Dry weather is ideal for ripening.",
+        "Excess rain or irrigation reduces sugar content."
+    ]},
+    c6: { icon: "⚗️", title: "Chemical Changes", points: [
+        "Increase in sucrose percentage (Pol value).",
+        "Decrease in reducing sugars (glucose and fructose).",
+        "Juice purity improves significantly."
+    ]}
+};
+
+/* ---- Open modal: fill content then show ---- */
+function openModal(id) {
+    var d = cardData[id];
+
+    // Set icon and title
+    document.getElementById("modal-icon").textContent  = d.icon;
+    document.getElementById("modal-title").textContent = d.title + " — Key Points";
+
+    // Build points HTML
+    var html = "";
+    for (var i = 0; i < d.points.length; i++) {
+        html += '<div class="modal-point">'
+              +   '<div class="modal-point-num">' + (i + 1) + '</div>'
+              +   '<div class="modal-point-text">' + d.points[i] + '</div>'
+              + '</div>';
+    }
+    document.getElementById("modal-points").innerHTML = html;
+
+    // Show the overlay
+    document.getElementById("card-modal").classList.add("open");
+}
+
+/* ---- Close modal when clicking the dark overlay (not the box itself) ---- */
+function closeModal(event) {
+    if (event.target === document.getElementById("card-modal")) {
+        document.getElementById("card-modal").classList.remove("open");
+    }
+}
+
+/* ---- Tab switching ---- */
+function switchTab(name, btn) {
+    for (var el of document.getElementsByClassName("tab-panel")) el.classList.remove("active");
+    for (var el of document.getElementsByClassName("tab-btn"))   el.classList.remove("active");
+    document.getElementById("tab-" + name).classList.add("active");
+    btn.classList.add("active");
+}
+
+/* ---- Kept for chatbot compatibility ---- */
+function openBox(id)   { document.getElementById(id).style.display = "flex"; }
+function closeBox(id)  { document.getElementById(id).style.display = "none"; }
+function toggleBox(id) { var b = document.getElementById(id); b.style.display = (b.style.display === "flex") ? "none" : "flex"; }
+
+window.chatbotConfig = {
+    position: "top-right",
+    preprompt: "User is on sugarcane maturity stage page"
+};
+
+</script>
+
+<link rel="stylesheet" href="/css/chatBotcss.css">
+<script src="/js/chatBotjs.js"></script>
+
+</body>
+</html>

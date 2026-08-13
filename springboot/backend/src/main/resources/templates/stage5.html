@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage V : Harvesting</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root{
+            --green:#2e7d32;
+            --green-dark:#1b5e20;
+            --green-mid:#388e3c;
+            --green-light:#4caf50;
+            --green-pale:#e8f5e9;
+            --green-bg:#f1f8f1;
+            --white:#ffffff;
+            --border:#c8e6c9;
+            --text:#1c2b1e;
+            --text-mid:#4a6350;
+            --shadow:0 6px 24px rgba(46,125,50,0.13);
+            --shadow-hover:0 14px 40px rgba(46,125,50,0.20);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Nunito',sans-serif;
+            background:var(--green-bg);
+            color:var(--text);
+        }
+
+        /* HERO */
+        .hero{
+            background:linear-gradient(135deg,var(--green-dark),var(--green-mid));
+            color:white;
+            padding:55px 40px;
+            display:flex;
+            align-items:center;
+            gap:25px;
+        }
+
+        .hero-icon{
+            width:80px;
+            height:80px;
+            border-radius:18px;
+            background:rgba(255,255,255,0.15);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:38px;
+        }
+
+        .hero-text h1{
+            font-family:'Merriweather',serif;
+            font-size:38px;
+            margin-bottom:10px;
+        }
+
+        .hero-text span{
+            color:#a5d6a7;
+        }
+
+        .hero-text p{
+            max-width:650px;
+            line-height:1.8;
+            color:rgba(255,255,255,0.82);
+        }
+
+        /* main */
+        .page-content{
+            max-width:1200px;
+            margin:auto;
+            padding:40px 25px;
+        }
+
+        .section-header{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            margin-bottom:25px;
+        }
+
+        .dot{
+            width:12px;
+            height:12px;
+            border-radius:50%;
+            background:var(--green-light);
+        }
+
+        .section-header h2{
+            font-family:'Merriweather',serif;
+            color:var(--green-dark);
+        }
+
+        .line{
+            flex:1;
+            height:2px;
+            background:linear-gradient(to right,var(--border),transparent);
+        }
+
+        /* trigger cards */
+        .trigger-grid{
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+        }
+
+        .trigger-card{
+            background:white;
+            border-left:5px solid var(--green-mid);
+            border-radius:14px;
+            padding:24px;
+            box-shadow:var(--shadow);
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .trigger-card:hover{
+            transform:translateY(-4px);
+            box-shadow:var(--shadow-hover);
+        }
+
+        .tc-left{
+            display:flex;
+            gap:18px;
+            align-items:center;
+        }
+
+        .tc-icon{
+            width:55px;
+            height:55px;
+            border-radius:12px;
+            background:var(--green-pale);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:24px;
+        }
+
+        .trigger-card h3{
+            font-family:'Merriweather',serif;
+            color:var(--green-dark);
+            margin-bottom:6px;
+        }
+
+        .trigger-card p{
+            color:var(--text-mid);
+        }
+
+        .tc-arrow{
+            font-size:24px;
+            color:var(--green-mid);
+        }
+
+        /* overlay */
+        .overlay{
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.55);
+            z-index:999;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
+        }
+
+        .overlay.open{
+            display:flex;
+        }
+
+        /* modal */
+        .modal{
+            background:white;
+            width:100%;
+            max-width:1200px;
+            max-height:90vh;
+            overflow-y:auto;
+            border-radius:16px;
+        }
+
+        .modal-header{
+            background:linear-gradient(90deg,var(--green-dark),var(--green-mid));
+            color:white;
+            padding:24px;
+            position:sticky;
+            top:0;
+        }
+
+        .modal-header h2{
+            font-family:'Merriweather',serif;
+        }
+
+        .close-btn{
+            position:absolute;
+            right:18px;
+            top:14px;
+            width:38px;
+            height:38px;
+            border:none;
+            border-radius:50%;
+            background:rgba(255,255,255,0.20);
+            color:white;
+            font-size:18px;
+            cursor:pointer;
+        }
+
+        .modal-body{
+            padding:25px;
+        }
+
+        /* cards */
+        .grid-3{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:18px;
+            margin-bottom:18px;
+        }
+
+        .grid-2{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:18px;
+        }
+
+        .grid-5{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:18px;
+        }
+
+        .card{
+            background:white;
+            border:1px solid var(--border);
+            border-radius:14px;
+            box-shadow:var(--shadow);
+            overflow:hidden;
+        }
+
+        .card-head{
+            background:linear-gradient(135deg,var(--green-dark),var(--green-mid));
+            color:white;
+            padding:15px;
+            font-family:'Merriweather',serif;
+        }
+
+        .card-body{
+            padding:18px;
+            line-height:1.8;
+            color:var(--text-mid);
+        }
+
+        .card-body strong{
+            color:var(--green-dark);
+        }
+
+        .card-body ul{
+            padding-left:18px;
+            margin-top:8px;
+        }
+
+        .map-card iframe{
+            width:100%;
+            height:360px;
+            border:0;
+        }
+
+        /* responsive */
+        @media(max-width:900px){
+            .grid-3,.grid-2,.grid-5{
+                grid-template-columns:1fr;
+            }
+
+            .hero{
+                flex-direction:column;
+                text-align:center;
+            }
+        }
+
+        @media(max-width:600px){
+            .trigger-card{
+                flex-direction:column;
+                align-items:flex-start;
+                gap:12px;
+            }
+
+            .hero-text h1{
+                font-size:28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-icon">🌾</div>
+
+    <div class="hero-text">
+        <h1>Stage V : <span>Harvesting</span></h1>
+        <p>
+            The final and most rewarding phase of the sugarcane cycle —
+            where months of careful cultivation come to fruition.
+            Timing, technique, and swift action are everything.
+        </p>
+    </div>
+</div>
+
+<!-- PAGE -->
+<div class="page-content">
+
+    <div class="section-header">
+        <div class="dot"></div>
+        <h2>Explore This Stage</h2>
+        <div class="line"></div>
+    </div>
+
+    <div class="trigger-grid">
+
+        <!-- card 1 -->
+        <div class="trigger-card" onclick="openModal('basicInfoOverlay')">
+            <div class="tc-left">
+                <div class="tc-icon">📋</div>
+                <div>
+                    <h3>Basic Information</h3>
+                    <p>Overview, maturity signs, harvesting methods, practices, post-harvest handling and map.</p>
+                </div>
+            </div>
+            <div class="tc-arrow">→</div>
+        </div>
+
+        <!-- card 2 -->
+        <div class="trigger-card" onclick="openModal('dothis')">
+            <div class="tc-left">
+                <div class="tc-icon">✅</div>
+                <div>
+                    <h3>Best Practices for Sugarcane Harvesting</h3>
+                    <p>Before and after cutting, timing, ratoon crop and transport guidance.</p>
+                </div>
+            </div>
+            <div class="tc-arrow">→</div>
+        </div>
+
+        <!-- card 3 -->
+        <div class="trigger-card" onclick="openModal('factory')">
+            <div class="tc-left">
+                <div class="tc-icon">🏭</div>
+                <div>
+                    <h3>Factory Communication Guide</h3>
+                    <p>How farmers should contact sugar factories.</p>
+                </div>
+            </div>
+            <div class="tc-arrow">→</div>
+        </div>
+
+        <!-- card 4 -->
+        <div class="trigger-card" onclick="window.location.href='/harvestForm'">
+            <div class="tc-left">
+                <div class="tc-icon">🌱</div>
+                <div>
+                    <h3>Harvest or Not</h3>
+                    <p>Check whether your crop is ready for harvesting.</p>
+                </div>
+            </div>
+            <div class="tc-arrow">→</div>
+        </div>
+
+    </div>
+</div>
+
+<!-- MODAL 1 -->
+<div class="overlay" id="basicInfoOverlay">
+    <div class="modal">
+
+        <div class="modal-header">
+            <h2>Stage V : Harvesting Stage of Sugarcane</h2>
+            <button class="close-btn" onclick="closeModal('basicInfoOverlay')">✕</button>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="grid-3">
+
+                <div class="card">
+                    <div class="card-head">Overview</div>
+                    <div class="card-body">
+                        <p>
+                            The harvesting stage is the final phase in the growth cycle of sugarcane.
+                            It typically occurs 10 to 18 months after planting, depending on the variety and climatic conditions.
+                        </p>
+                        <br>
+                        <strong>Signs of Maturity:</strong>
+                        <ul>
+                            <li>Leaves start drying and turning yellow</li>
+                            <li>Internodes become well-developed and firm</li>
+                            <li>Juice becomes sweet with high sugar content</li>
+                            <li>Growth rate slows down</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">Harvesting Methods</div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Manual Harvesting:</strong> Cutting canes close to the ground using knives or machetes</li>
+                            <li><strong>Mechanical Harvesting:</strong> Use of machines for large-scale farming</li>
+                        </ul>
+                        <br>
+                        <strong>Important Practices:</strong>
+                        <ul>
+                            <li>Harvest at the right maturity stage for maximum sugar yield</li>
+                            <li>Avoid cutting too early or too late</li>
+                            <li>Remove dry leaves and tops before transport</li>
+                            <li>Transport quickly to mills to prevent sugar loss</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">Post-Harvest Handling</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Clean and bundle canes properly</li>
+                            <li>Minimize delay between harvesting and processing</li>
+                            <li>Maintain moisture to reduce weight loss</li>
+                        </ul>
+                        <br>
+                        <strong>Conclusion:</strong>
+                        <p>
+                            Proper harvesting techniques and timing are crucial to ensure high sugar recovery and better quality produce.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card map-card">
+                <div class="card-head">Location Reference - Tambat Arch</div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.492746317654!2d74.21483004932671!3d16.686530549735682!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc1ab3db758840d%3A0x383ba7baef88f5a8!2sTambat%20Arch!5e0!3m2!1sen!2sin!4v1775458323908!5m2!1sen!2sin"></iframe>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 2 -->
+<div class="overlay" id="dothis">
+    <div class="modal">
+
+        <div class="modal-header">
+            <h2>Best Practices for Sugarcane Harvesting</h2>
+            <button class="close-btn" onclick="closeModal('dothis')">✕</button>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="grid-2">
+
+                <div class="card">
+                    <div class="card-head">1. Timing: How to Know When to Harvest</div>
+                    <div class="card-body">
+                        Harvesting at peak maturity ensures the highest sucrose content.
+                        <br><br>
+                        <strong>Maturity Window:</strong> Early varieties usually mature in 10–11 months, while mid-season or late varieties may take 12–18 months.
+                        <br><br>
+                        <strong>Visual Checks:</strong> Leaves turn yellow and dry, and the stalk will harden.
+                        <br><br>
+                        <strong>Metallic Sound Test:</strong> Mature cane gives sharp metallic sound.
+                        <br><br>
+                        <strong>Brix Test:</strong> Use a hand refractometer to measure Brix (sugar) level. A reading of 18% to 20% indicates peak maturity.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">2. Harvesting Technique</div>
+                    <div class="card-body">
+                        <strong>A. Manual harvesting:</strong> Common on smaller farms and needs skilled labour to avoid damaging future crops.
+                        <br><br>
+                        <strong>B. Mechanical harvesting:</strong> Mechanical harvesters are faster and more efficient for large, uniform fields.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">3. Critical Post-Harvest Steps</div>
+                    <div class="card-body">
+                        Once cane is cut, sugar begins to degrade immediately.
+                        <br><br>
+                        <strong>24-Hour Rule:</strong> Cane should reach mill within 24 hours. Any delay beyond this causes a rapid drop in sugar quality and weight.
+                        <br><br>
+                        <strong>Prevent Moisture Loss:</strong> If transport is delayed, cover the harvested cane piles with trash (dry leaves) and sprinkle them with water to keep them cool.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">4. Managing the Ratoon (The Next Crop)</div>
+                    <div class="card-body">
+                        Sugarcane is perennial, so harvest technique affects next year's growth.
+                        <br><br>
+                        <strong>Stubble Shaving:</strong> For manual harvest, shave the remaining "stubble" down to ground level to ensure uniform sprouting of the next crop.
+                        <br><br>
+                        <strong>Trash Mulching:</strong> Instead of burning the leftover leaves (trash), spread them across the field. This helps retain soil moisture, prevents weeds, and adds organic matter back into the soil.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 3 -->
+<div class="overlay" id="factory">
+    <div class="modal">
+
+        <div class="modal-header">
+            <h2>How Farmers Should Contact Sugar Factories</h2>
+            <button class="close-btn" onclick="closeModal('factory')">✕</button>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="grid-5">
+
+                <div class="card">
+                    <div class="card-head">1. Contact Through Village Sugar Society</div>
+                    <div class="card-body">
+                        <p>Village society forwards this information to factory agriculture department</p>
+                        <p>Farmers should inform village sugar society when crop is ready:</p>
+                        <ul>
+                            <li>Farmer Name</li>
+                            <li>Survey Number</li>
+                            <li>Registered Area</li>
+                            <li>Variety (Co-86032)</li>
+                            <li>Crop Maturity Status</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">2. Contact Factory Agriculture Officer</div>
+                    <div class="card-body">
+                        <ul>
+                            <strong>Farmer may directly contact:</strong>
+                            <li>Factory Agriculture Officer</li>
+                            <li>Cane Development Officer</li>
+                            <strong>Farmer should provide:</strong>
+                            <li>Crop readiness information</li>
+                            <li>Field location</li>
+                            <li>Registered area</li>
+                            <li>Expected harvesting date</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">3. Contact Through Mukadam</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Inform crop maturity</li>
+                            <li>Confirm cutting date</li>
+                            <li>Discuss labour availability</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">4. Contact Factory Office</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Visiting factory office</li>
+                            <li>Calling agriculture department</li>
+                            <li>Checking society notice</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">5. Mobile Communication</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Phone calls</li>
+                            <li>SMS alerts</li>
+                            <li>WhatsApp groups</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(id){
+        document.getElementById(id).classList.add("open");
+    }
+
+    function closeModal(id){
+        document.getElementById(id).classList.remove("open");
+    }
+
+    document.querySelectorAll('.overlay').forEach(function(box){
+        box.addEventListener('click',function(e){
+            if(e.target === this){
+                this.classList.remove('open');
+            }
+        });
+    });
+
+    window.chatbotConfig = {
+        position:"top-right",
+        preprompt:"User is on sugarcane harvesting stage page. Answer only about sugarcane stage 5 harvesting."
+    };
+</script>
+
+<link rel="stylesheet" href="/css/chatBotcss.css">
+<script src="/js/chatBotjs.js"></script>
+
+</body>
+</html>

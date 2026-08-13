@@ -1,0 +1,73 @@
+body{
+    margin: 50px 25px 25px 25px;
+}
+
+.approxCaneCard{
+    border: solid;
+    margin-top: 30px;
+}
+.approxCaneCard:hover{
+    background-color: yellow;
+}
+#approxCaneOverlay{
+    display: none;
+    border: solid;
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+.approxCane{            
+    border: solid;
+    border-radius: 10px;
+    height: 400px;
+    width: 500px;
+    
+    padding: 25px;
+
+    background-color: #fff;
+
+    position: relative;            
+}
+.closeButton{
+    position: absolute;
+    top:10px;
+    right:10px;
+    cursor: pointer;
+}
+
+
+#spacingOverlay{
+    display: none;
+    border: solid;
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.spacing{
+    border: solid;
+    height: 400px;
+    width: 500px;
+    background-color: #fff;
+    position: relative;   
+}
+.spacingCard{
+    border: solid;
+}
+.spacingCard:hover{
+    background-color: yellow;
+}

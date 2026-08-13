@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugarcane – 852.9</title>
+
+
+    <style>
+
+    /* ========== RESET & BASE ========== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4faf4;
+        padding: 20px;
+        color: #1b1b1b;
+        line-height: 1.6;
+    }
+
+    /* ========== HEADINGS ========== */
+    h1 {
+        text-align: center;
+        color: #2e7d32;
+        margin-bottom: 10px;
+        font-size: 1.6rem;
+    }
+    h2 {
+        color: #2e7d32;
+        text-align: center;
+        margin: 30px 0 16px;
+        font-size: 1.25rem;
+    }
+    h3 {
+        color: #1b5e20;
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+
+    /* ========== CONTAINER ========== */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto 24px auto;
+        background: #ffffff;
+        padding: 28px 30px;
+        border-radius: 12px;
+        border: 1px solid #c8e6c9;
+        box-shadow: 0 2px 8px rgba(46,125,50,0.08);
+    }
+
+    /* ========== HERO CARD1 (Tillering click) ========== */
+    .card1 {
+        max-width: 1400px;
+        margin: 0 auto 20px auto;
+        padding: 22px 30px;
+        background: #2e7d32;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.2s;
+        text-align: center;
+    }
+    .card1:hover { background: #256427; }
+    .card1 h2 {
+        color: #ffffff;
+        margin: 0;
+        font-size: 1.4rem;
+    }
+
+    /* ========== TILLERING OVERLAY ========== */
+    #tillerOverlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        height: 100%; width: 100%;
+        background-color: rgba(0,0,0,0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    .tillering {
+        border: 2px solid #2e7d32;
+        border-radius: 12px;
+        padding: 30px;
+        background-color: white;
+        max-height: 90vh;
+        width: 600px;
+        overflow-y: auto;
+        position: relative;
+    }
+    .CloseButton {
+        position: absolute;
+        top: 12px; right: 14px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: bold;
+        color: #2e7d32;
+        background: #e8f5e9;
+        border: none;
+        border-radius: 50%;
+        width: 28px; height: 28px;
+        display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ========== CARD GRID (pratiksha) ========== */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+        margin: 20px 0;
+    }
+    .card {
+        background: #ffffff;
+        border: 1px solid #c8e6c9;
+        border-left: 4px solid #2e7d32;
+        padding: 18px 20px;
+        border-radius: 0 10px 10px 0;
+    }
+
+    /* ========== BUTTON BAR (disease sections) ========== */
+    .btn-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    .btn-bar button {
+        padding: 9px 20px;
+        background: #ffffff;
+        color: #2e7d32;
+        border: 1px solid #2e7d32;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: Arial, sans-serif;
+    }
+    .btn-bar button:hover,
+    .btn-bar button.active {
+        background: #2e7d32;
+        color: #ffffff;
+    }
+
+    /* ========== SECTION TOGGLE ========== */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ========== DATTARAJ — 3 CARDS IN ONE ROW ========== */
+    .dattaraj-row {
+        display: flex;
+        gap: 20px;
+        max-width: 1400px;
+        margin: 0 auto 24px auto;
+        align-items: stretch;
+    }
+    .dattaraj-row > div {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .spacingCard {
+        background: #ffffff;
+        border: 1px solid #c8e6c9;
+        border-top: 4px solid #2e7d32;
+        border-radius: 10px;
+        padding: 30px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: background 0.15s, box-shadow 0.15s;
+        height: 100%;
+    }
+    .spacingCard:hover { background: #e8f5e9; box-shadow: 0 4px 14px rgba(46,125,50,0.13); }
+    .spacingCard h1 { font-size: 1.15rem; color: #2e7d32; margin: 0 0 6px; }
+
+    .approxCaneCard {
+        background: #ffffff;
+        border: 1px solid #c8e6c9;
+        border-top: 4px solid #2e7d32;
+        border-radius: 10px;
+        padding: 30px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: background 0.15s, box-shadow 0.15s;
+        height: 100%;
+    }
+    .approxCaneCard:hover { background: #e8f5e9; box-shadow: 0 4px 14px rgba(46,125,50,0.13); }
+    .approxCaneCard h1 { font-size: 1.15rem; color: #2e7d32; margin: 0 0 6px; }
+
+    .npkCard {
+        background: #ffffff;
+        border: 1px solid #c8e6c9;
+        border-top: 4px solid #2e7d32;
+        border-radius: 10px;
+        padding: 30px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: background 0.15s, box-shadow 0.15s;
+        height: 100%;
+    }
+    .npkCard:hover { background: #e8f5e9; box-shadow: 0 4px 14px rgba(46,125,50,0.13); }
+    .npkCard h1 { font-size: 1.15rem; color: #2e7d32; margin: 0 0 6px; }
+
+    .card-hint {
+        font-size: 0.82rem;
+        color: #555;
+        margin-top: 4px;
+    }
+
+    /* ========== SPACING OVERLAY ========== */
+    #spacingOverlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        height: 100%; width: 100%;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1000;
+    }
+    .spacing {
+        border: 2px solid #2e7d32;
+        border-radius: 12px;
+        padding: 30px;
+        width: 500px;
+        background-color: #fff;
+        position: relative;
+    }
+    .spacing h1 { font-size: 1.3rem; margin-bottom: 14px; }
+
+    /* ========== APPROX CANE OVERLAY ========== */
+    #approxCaneOverlay {
+        display: none;
+        border: solid;
+        z-index: 1000;
+        position: fixed;
+        top: 0; left: 0;
+        height: 100%; width: 100%;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+        background-color: rgba(0,0,0,0.5);
+    }
+    .approxCane {
+        border: 2px solid #2e7d32;
+        border-radius: 12px;
+        padding: 30px;
+        height: 600px;
+        width: 600px;
+        background-color: #fff;
+        position: relative;
+    }
+    .approxCane h2 { font-size: 1.1rem; margin-bottom: 16px; }
+    .approxCane input[type="number"] {
+        border: 1px solid #c8e6c9;
+        border-radius: 6px;
+        padding: 6px 10px;
+        margin-left: 8px;
+        font-family: Arial, sans-serif;
+        font-size: 0.9rem;
+        outline: none;
+    }
+    .approxCane input[type="number"]:focus { border-color: #2e7d32; }
+    .approxCane input[type="submit"] {
+        background: #2e7d32;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 22px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-family: Arial, sans-serif;
+    }
+    .approxCane input[type="submit"]:hover { background: #256427; }
+
+    /* ========== NPK OVERLAY ========== */
+    #npkOverlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        height: 100%; width: 100%;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0,0,0,0.5);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+    }
+    #npkOverlay h2 { color: #2e7d32; text-align: left; font-size: 1.1rem; margin: 18px 0 6px; }
+    #npkOverlay h2:first-of-type { margin-top: 0; }
+    .npk {
+        position: relative;
+        background-color: white;
+        height: 500px;
+        width: 500px;
+        border: 2px solid #2e7d32;
+        border-radius: 12px;
+        padding: 28px;
+        overflow-y: auto;
+    }
+    .npk p { font-size: 0.88rem; color: #3a3a3a; margin-bottom: 8px; }
+
+    /* ========== SHARED CLOSE BUTTON ========== */
+    .closeButton {
+        position: absolute;
+        top: 12px; right: 14px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: bold;
+        color: #2e7d32;
+        background: #e8f5e9;
+        border: none;
+        border-radius: 50%;
+        width: 28px; height: 28px;
+        display: flex; align-items: center; justify-content: center;
+        line-height: 1;
+    }
+
+    /* ========== TABS (Pranali — Balbharani) ========== */
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0;
+        border-bottom: 2px solid #c8e6c9;
+        margin-bottom: 20px;
+    }
+    .tab-btn {
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        padding: 10px 16px;
+        cursor: pointer;
+        font-size: 14px;
+        font-family: Arial, sans-serif;
+        color: #3a3a3a;
+        transition: 0.2s;
+        white-space: nowrap;
+        margin-bottom: -2px;
+    }
+    .tab-btn:hover { background: #e8f5e9; color: #2e7d32; }
+    .tab-btn.active {
+        border-bottom: 3px solid #2e7d32;
+        color: #2e7d32;
+        font-weight: bold;
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ========== TABLE ========== */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+    table, th, td { border: 1px solid #c8e6c9; }
+    th {
+        background: #e8f5e9;
+        color: #1b5e20;
+        padding: 10px;
+        text-align: left;
+        font-weight: 600;
+    }
+    td { padding: 10px; color: #3a3a3a; }
+    tr:nth-child(even) td { background: #f4faf4; }
+
+    /* ========== LIST ========== */
+    ul, ol { padding-left: 20px; }
+    li { margin-bottom: 4px; font-size: 0.9rem; color: #3a3a3a; }
+
+    /* ========== NEXT BUTTON ========== */
+    .next-wrap { text-align: center; margin: 24px 0 16px; }
+    .next-wrap a button {
+        background: #2e7d32;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 40px;
+        font-size: 1rem;
+        font-family: Arial, sans-serif;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+    .next-wrap a button:hover { background: #256427; }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+        .dattaraj-row { flex-direction: column; }
+        .container { padding: 18px 14px; }
+        .approxCane, .spacing, .npk, .tillering { width: 95vw; height: auto; }
+    }
+
+    </style>
+</head>
+<body>
+
+<!-- Dattaraj + pratiksha -->
+<div class="card1" onclick="OpenTillering()">
+    <h2>🌿 Tillering Stage of Sugarcane</h2>
+</div>
+
+<div id="tillerOverlay">
+    <div class="tillering">
+        <span class="CloseButton" onclick="CloseTillering()">✕</span>
+        <p>
+            <strong style="color:#2e7d32">Duration:</strong> ~90 to 120 days after planting, Approx duration 2.5 month i.e. 75 days<br><br>
+            The plant begins producing leaves actively after ~30-35 days.<br><br>
+            <strong style="color:#2e7d32">Processes:</strong><br><br>
+            Multiple shoots (called tillers) emerge from the base of the original shoot.<br>
+            This stage determines the final shoot population, which directly influences yield.<br><br>
+            <strong style="color:#2e7d32">Nutrient Requirement:</strong><br>
+            Nitrogen is most important during this stage.<br>
+            Adequate nitrogen ensures vigorous tiller growth and healthy leaf development.<br><br>
+            <strong style="color:#2e7d32">Significance:</strong><br>
+            The number of tillers that survive indicates how much sugarcane will grow later.<br>
+            A strong tillering stage sets the foundation for the Grand Growth Stage.
+        </p>
+    </div>
+</div>
+
+
+<!-- pratiksha -->
+<div class="container">
+    <h1>🌾 IMPORTANT FACTORS FOR TILLERING</h1>
+    <h3 style="color:#3a3a3a; text-align:center; font-weight:normal; margin-bottom:20px;">To promote maximum tillering in sugarcane, focus on healthy buds, adequate sunlight and optimum temperature, and proper water management.</h3>
+
+    <div class="card-grid">
+        <div class="card">
+            <h3>🌱 Healthy Buds &amp; Planting</h3>
+            ✔ Use healthy, disease-free setts<br>✔ Plant setts 5–10 cm deep<br>✔ Spacing: 20–30 cm setts, 90 cm rows<br>✔ Apply Nitrogen in early growth<br>✔ Avoid extreme temperatures
+        </div>
+        <div class="card">
+            <h3>☀️ Sunlight &amp; Temperature</h3>
+            ✔ Requires full sunlight<br>✔ Proper row orientation<br>✔ Ideal temperature: 20–30°C<br>✔ Avoid below 13°C / above 32°C<br>✔ Warm humid climate preferred
+        </div>
+        <div class="card">
+            <h3>💧 Water Management</h3>
+            ✔ Maintain 60–70% soil moisture<br>✔ 8–10 day interval later<br>✔ Ensure proper drainage<br>✔ Use Drip irrigation for efficiency
+        </div>
+    </div>
+
+    <h1>🦠 SUGARCANE DISEASE MANAGEMENT</h1>
+    <h3 class="section-intro" style="color:#3a3a3a; text-align:center; font-weight:normal; margin-bottom:16px;">Sugarcane is affected by fungal, bacterial, viral, and phytoplasma diseases, causing yield and sugar loss. Integrated Disease Management is the most effective solution.</h3>
+
+    <div class="btn-bar">
+        <button onclick="showSection('diseases')">Major Diseases</button>
+        <button onclick="showSection('organic')">Organic Fertilizers</button>
+        <button onclick="showSection('methods')">Control Methods</button>
+        <button onclick="showSection('idm')">Integrated Management</button>
+        <button onclick="showSection('flow')">Management Flow</button>
+    </div>
+
+    <div id="diseases" class="section">
+        <div class="card-grid">
+            <div class="card">
+                <h3>🔴 Fungal Diseases</h3>
+                <strong>Red Rot (Colletotrichum falcatum)</strong><br>
+                Red internal tissues, sour smell, hollow canes, heavy yield loss<br><br>
+                <strong>Smut (Ustilago scitaminea)</strong><br>
+                Black whip-like structures, spread by wind &amp; infected setts<br><br>
+                <strong>Wilt (Fusarium/Cephalosporium)</strong><br>
+                Yellowing, stunting, hollow stalks
+            </div>
+            <div class="card">
+                <h3>🦠 Bacterial Disease</h3>
+                <strong>Ratoon Stunting (Leifsonia xyli)</strong><br>
+                Stunted growth, thin stalks, fewer tillers
+            </div>
+            <div class="card">
+                <h3>🧬 Viral Diseases</h3>
+                <strong>Mosaic Virus</strong><br>
+                Yellow-green mottling on leaves<br><br>
+                <strong>Yellow Leaf Disease</strong><br>
+                Reduced photosynthesis and vigor
+            </div>
+            <div class="card">
+                <h3>🌿 Phytoplasma Disease</h3>
+                <strong>Grassy Shoot</strong><br>
+                Excess tillering, narrow chlorotic leaves, bushy clumps
+            </div>
+        </div>
+    </div>
+
+    <div id="organic" class="section">
+        <div class="card-grid">
+            <div class="card">
+                <h3>🌱 FYM / Compost</h3>
+                Rich source of organic matter &amp; micronutrients<br>Improves soil structure, aeration &amp; water-holding capacity<br>Enhances beneficial soil microorganisms<br>Reduces Red Rot, Wilt &amp; root diseases<br><strong>Application: 10–25 tons/ha</strong>
+            </div>
+            <div class="card">
+                <h3>🪱 Vermicompost</h3>
+                Contains beneficial microbes &amp; enzymes<br>Enhances root growth &amp; nutrient availability<br>Suppresses soilborne pathogens<br>Improves cane vigor &amp; stress resistance<br><strong>Application: 2–5 tons/ha</strong>
+            </div>
+            <div class="card">
+                <h3>🦠 Trichoderma harzianum</h3>
+                Powerful fungal biocontrol agent<br>Controls Red Rot, Wilt &amp; Pokkah Boeng<br>Destroys pathogens by mycoparasitism<br>Competes for nutrients &amp; space<br><strong>Sett treatment: 10 g/kg setts</strong><br><strong>Soil application: 10 kg/ha</strong>
+            </div>
+            <div class="card">
+                <h3>🌿 Azospirillum &amp; PSB</h3>
+                Azospirillum fixes atmospheric nitrogen<br>PSB solubilizes phosphorus<br>Improves root development &amp; nutrient uptake<br>Enhances plant vigor &amp; disease tolerance<br><strong>Application: Sett dip or soil application</strong>
+            </div>
+            <div class="card">
+                <h3>🌰 Neem Cake</h3>
+                Natural antifungal &amp; antibacterial properties<br>Controls soilborne fungi &amp; nematodes<br>Reduces early-stage insect pests<br>Improves soil microbial balance<br><strong>Application: 500–1000 kg/ha</strong>
+            </div>
+            <div class="card">
+                <h3>🧪 Boron &amp; Manganese</h3>
+                Strengthens cell walls<br>Activates enzymes<br>Improves sugar transport<br>Reduces Red Rot &amp; Wilt susceptibility<br><strong>Sett treatment: 40 ppm for 10 minutes</strong>
+            </div>
+        </div>
+    </div>
+
+    <div id="methods" class="section">
+        <div class="card-grid">
+            <div class="card">
+                <h3>🌾 Cultural Practices</h3>
+                Use disease-free, certified setts<br>Grow resistant varieties<br>Follow crop rotation<br>Avoid ratooning infected crops<br>Maintain proper field sanitation<br>Prevent waterlogging
+            </div>
+            <div class="card">
+                <h3>🔥 Physical Methods</h3>
+                Hot Water Treatment: 50–52°C for 30–120 minutes<br>Aerated steam or moist hot air treatment<br>Deep ploughing to reduce soil inoculum
+            </div>
+            <div class="card">
+                <h3>🦠 Biological Control</h3>
+                Trichoderma spp. for fungal diseases<br>Neem extracts for vector control<br>Beauveria bassiana &amp; Trichogramma spp.<br>(Indirect reduction of disease spread)
+            </div>
+            <div class="card">
+                <h3>⚠️ Chemical Control</h3>
+                Carbendazim, Mancozeb, Triadimefon<br>(For Red Rot, Smut, Pokkah Boeng)<br>Malathion / Dimethoate for aphids &amp; leafhoppers<br>Sett treatment before planting<br><strong>(Use only when disease exceeds threshold)</strong>
+            </div>
+        </div>
+    </div>
+
+    <div id="idm" class="section">
+        <div class="card-grid">
+            <div class="card">
+                <h3>🔰 Prevention</h3>
+                Use healthy, disease-free setts<br>Grow resistant sugarcane varieties<br>Treat setts with hot water, fungicides or bioagents<br>Maintain proper spacing and irrigation<br>Prevent disease-friendly conditions
+            </div>
+            <div class="card">
+                <h3>👁️ Monitoring</h3>
+                Regular field inspection during crop growth<br>Early detection of Red Rot, Smut, Wilt, Grassy Shoot<br>Monitor aphids and leafhoppers<br>Early action reduces crop loss
+            </div>
+            <div class="card">
+                <h3>🔗 Combination of Methods</h3>
+                Cultural practices for disease prevention<br>Biological agents like Trichoderma and neem<br>Inputs such as FYM and vermicompost<br>Chemical control only when necessary
+            </div>
+            <div class="card">
+                <h3>🧹 Sanitation</h3>
+                Remove and destroy infected plants<br>Burn or bury diseased crop residues<br>Clean tools and machinery<br>Avoid ratooning from infected fields
+            </div>
+            <div class="card">
+                <h3>🎓 Training &amp; Awareness</h3>
+                Farmer education on disease identification<br>Training on sett treatment and hygiene<br>Promote timely disease management<br>Encourage eco-friendly farming practices
+            </div>
+        </div>
+    </div>
+
+    <div id="flow" class="section">
+        <div class="card-grid">
+            <div class="card">
+                <h3>🌱 1. Healthy Setts Selection</h3>
+                Select seed cane from disease-free certified fields<br>Use setts with healthy buds and proper moisture<br>Avoid discolored or fungus-infected setts<br>Do not use setts from infected or ratooned fields<br>Healthy planting material ensures strong crop establishment
+            </div>
+            <div class="card">
+                <h3>🔥 2. Hot Water Treatment</h3>
+                Eliminates fungal, bacterial and phytoplasma pathogens<br>Hot Water Treatment: 50–52°C for 30–120 minutes<br>Chemical treatment using Carbendazim or Mancozeb (if needed)<br>Prevents Red Rot, Smut, Wilt and Grassy Shoot infections
+            </div>
+            <div class="card">
+                <h3>🌾 3. Resistant Variety Planting</h3>
+                Resistant varieties reduce disease severity<br>Limits disease spread within the field<br>Better adaptation to climate and stress conditions<br>Ensures stable yield and sugar recovery<br>Resistance is the most economical disease control method
+            </div>
+            <div class="card">
+                <h3>🌿 4. Organic Manure + Trichoderma</h3>
+                FYM, compost and vermicompost improve soil health<br>Enhances beneficial microbial population<br>Trichoderma suppresses soil-borne fungal pathogens<br>Protects roots and basal stem region<br>Reduces dependence on chemical fungicides
+            </div>
+            <div class="card">
+                <h3>👁️ 5. Regular Monitoring</h3>
+                Inspect fields regularly during crop growth<br>Focus on early vegetative and tillering stages<br>Look for leaf discoloration and whip smut symptoms<br>Identify stunted or bushy plants early<br>Monitor aphids and leafhoppers for disease spread
+            </div>
+            <div class="card">
+                <h3>🧹 6. Removal of Infected Plants</h3>
+                Immediately uproot and destroy infected clumps<br>Prevents secondary spread of pathogens<br>Protects nearby healthy plants<br>Avoid composting diseased plants<br>Maintain strict field sanitation
+            </div>
+            <div class="card">
+                <h3>⚠️ 7. Chemical Control (If Required)</h3>
+                Use fungicides for fungal diseases<br>Use insecticides for vector control<br>Follow recommended dosage and timing<br>Avoid overuse to prevent resistance and environmental damage
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Dattaraj — 3 cards in ONE row with equal width -->
+<div class="dattaraj-row">
+
+    <div>
+        <div class="spacingCard" onclick="OpenSpacing()">
+            <h1>📏 Spacing</h1>
+            <p class="card-hint">Sett &amp; row distance guide</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="approxCaneCard" onclick="OpenApproxCane()">
+            <h1>🌾 Estimate Canes</h1>
+            <p class="card-hint">Calculate tillers / canes from your farmland</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="npkCard" onclick="OpenNpk()">
+            <h1>🧪 Why N P K?</h1>
+            <p class="card-hint">Nutrient roles in sugarcane growth</p>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Spacing Overlay -->
+<div id="spacingOverlay">
+    <div class="spacing">
+        <span class="closeButton" onclick="CloseSpacing()">✕</span>
+        <h1>Spacing</h1>
+        <p>
+            In stage 1 germination, you must keep sett distance 1.5 foot or 2 foot<br>
+            and distance between 2 rows (saries) / Row-to-Row Spacing must be 4.5 foot or 5 foot.
+        </p>
+    </div>
+</div>
+
+<!-- Approx Cane Overlay -->
+<div id="approxCaneOverlay">
+    <div class="approxCane">
+        <span class="closeButton" onclick="CloseApproxCane()">✕</span>
+        <h2>Know how many canes you will have</h2>
+        <form id="NoOfCanesForm">
+            Acre of Land : <input type="number" name="acre" required><br><br>
+            Row-to-Row Spacing : <input type="number" name="rowDistance" required><br><br>
+            sett-to-sett Spacing : <input type="number" name="settDistance" required><br><br>
+            Number of budes(eyes) planted : <input type="number" name="NoOfBuds" required><br><br>
+            <input type="submit" value="Estimate"><br><br>
+        </form>
+        <h2 id="NoOfCanesResult"></h2>
+    </div>
+</div>
+
+<!-- NPK Overlay -->
+<div id="npkOverlay">
+    <div class="npk">
+        <span class="closeButton" onclick="CloseNpk()">✕</span>
+        <h2>Nitrogen N</h2>
+        <p>Nitrogen is necessary for canes growth</p>
+        <p>Nitrogen is essential for sugarcane growth and development. It promotes vigorous vegetative growth, increases tiller formation, and helps in the production of healthy green leaves, which are necessary for photosynthesis.</p>
+        <p>Adequate nitrogen improves cane length, thickness, and overall yield. However, excess nitrogen can delay maturity, reduce sugar content, and make the crop more prone to pests and diseases.</p>
+        <p>For best results, nitrogen should be applied in split doses—during planting and early growth stages—and balanced with phosphorus and potassium for optimal sugar recovery.</p>
+
+        <h2>Phosphorus P</h2>
+        <p>Phosphorus is necessary for growth of roots of sugarcane &amp; for cell division of sugarcane</p>
+        <p>Phosphorus is essential for strong root development in sugarcane, helping the plant establish quickly and absorb nutrients efficiently from the soil.</p>
+        <p>It plays a key role in cell division and energy transfer, which supports early growth, tillering, and overall plant vigor.</p>
+        <p>Adequate phosphorus improves cane formation, enhances resistance to stress, and contributes to better crop maturity and yield.</p>
+
+        <h2>Potassium K</h2>
+        <p>Potassium is necessary for increasing sucrose content of sugarcane, improves thickness of cane also leaf became healthy because of it</p>
+        <p>Potassium is essential for increasing the sucrose (sugar) content of sugarcane, thereby improving juice quality and sugar recovery.</p>
+        <p>It helps in improving cane thickness and strength, resulting in heavier and healthier canes.</p>
+        <p>Potassium also improves leaf health by enhancing photosynthesis and water regulation, making the crop more resistant to drought, pests, and diseases.</p>
+    </div>
+</div>
+
+
+<!-- Pranali — Balbharani Guide -->
+<div class="container">
+    <h1>🌾 Sugarcane Balbharani Guide</h1>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="overview">🌱 Overview</button>
+        <button class="tab-btn" data-tab="region">📍 Region &amp; Timing</button>
+        <button class="tab-btn" data-tab="fertilizer">🧪 Fertilizers</button>
+        <button class="tab-btn" data-tab="method">🛠️ Method</button>
+        <button class="tab-btn" data-tab="micro">🧂 Micronutrients</button>
+        <button class="tab-btn" data-tab="reference">📊 Quick Reference</button>
+    </div>
+
+    <div id="overview" class="tab-content active">
+        <h2>What is Balbharani?</h2>
+        <p>Balbharani is an important field operation carried out during the <strong>tillering stage of sugarcane</strong>. It involves application of fertilizers followed by earthing-up to strengthen the crop.</p>
+        <h3 style="margin-top:14px;">Importance</h3>
+        <ul>
+            <li>Encourages more tillers</li>
+            <li>Improves root development</li>
+            <li>Reduces lodging</li>
+            <li>Enhances nutrient uptake</li>
+        </ul>
+    </div>
+
+    <div id="region" class="tab-content">
+        <h2>Region &amp; Timing (Kolhapur)</h2>
+        <ul>
+            <li><strong>Crop Stage:</strong> 45–60 days after planting</li>
+            <li><strong>Season:</strong> December–February (Adsali &amp; Suru)</li>
+            <li><strong>Soil:</strong> Black cotton &amp; medium soils</li>
+            <li><strong>Irrigation:</strong> Moist soil condition required</li>
+        </ul>
+    </div>
+
+    <div id="fertilizer" class="tab-content">
+        <h2>Fertilizer Recommendation (Per Acre)</h2>
+        <table>
+            <tr><th>Fertilizer</th><th>Quantity</th></tr>
+            <tr><td>Urea</td><td>100 kg</td></tr>
+            <tr><td>SSP / DAP</td><td>125 kg / 50 kg</td></tr>
+            <tr><td>MOP</td><td>50 kg</td></tr>
+        </table>
+        <p style="margin-top:10px; font-size:0.88rem;"><strong>Note:</strong> Apply fertilizers along both sides of rows.</p>
+    </div>
+
+    <div id="method" class="tab-content">
+        <h2>Balbharani Method</h2>
+        <ol>
+            <li>Light irrigation one day before operation</li>
+            <li>Apply fertilizers uniformly in furrows</li>
+            <li>Mix fertilizer with soil</li>
+            <li>Perform earthing-up properly</li>
+            <li>Ensure proper drainage</li>
+        </ol>
+    </div>
+
+    <div id="micro" class="tab-content">
+        <h2>Micronutrient Application</h2>
+        <table>
+            <tr><th>Nutrient</th><th>Quantity</th><th>Method</th></tr>
+            <tr><td>Zinc Sulphate</td><td>10 kg/acre</td><td>Soil application</td></tr>
+            <tr><td>Iron Sulphate</td><td>10 kg/acre</td><td>Soil application</td></tr>
+            <tr><td>Boron</td><td>2 kg/acre</td><td>Soil application</td></tr>
+        </table>
+    </div>
+
+    <div id="reference" class="tab-content">
+        <h2>Quick Farmer Reference</h2>
+        <ul>
+            <li>Do not apply fertilizer on dry soil</li>
+            <li>Avoid excess nitrogen</li>
+            <li>Ensure proper earthing-up</li>
+            <li>Observe crop for 7–10 days after operation</li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="next-wrap">
+    <a href="/stage3"><button>Next →</button></a>
+</div>
+
+
+<script>
+    // Dattaraj + pratiksha
+    function OpenTillering() { document.getElementById("tillerOverlay").style.display = "flex"; }
+    function CloseTillering() { document.getElementById("tillerOverlay").style.display = "none"; }
+
+    // pratiksha
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.remove('active');
+        });
+        document.querySelectorAll('.btn-bar button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    // Dattaraj
+    function OpenApproxCane() { document.getElementById("approxCaneOverlay").style.display = "flex"; }
+    function CloseApproxCane() { document.getElementById("approxCaneOverlay").style.display = "none"; }
+
+    function OpenSpacing() { document.getElementById("spacingOverlay").style.display = "flex"; }
+    function CloseSpacing() { document.getElementById("spacingOverlay").style.display = "none"; }
+
+    function OpenNpk() { document.getElementById("npkOverlay").style.display = "flex"; }
+    function CloseNpk() { document.getElementById("npkOverlay").style.display = "none"; }
+
+    document.getElementById("NoOfCanesForm").addEventListener("submit",function(e){
+            e.preventDefault();
+
+            var fromData = new FormData(this);
+
+            fetch(
+                "/stage2/NoOfCanes",
+                {
+                    method : "Post",    
+                    body:fromData
+                }
+            ).then(
+                function(response) {
+                    return response.text();
+                }
+            ).then(
+                function(result){
+                document.getElementById("NoOfCanesResult").innerText=result;
+                }
+            ) .catch(err => console.error(err));
+
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Pranali — tab system
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const tabContents = document.querySelectorAll(".tab-content");
+        tabButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                tabButtons.forEach(btn => btn.classList.remove("active"));
+                tabContents.forEach(tab => tab.classList.remove("active"));
+                button.classList.add("active");
+                const tabId = button.getAttribute("data-tab");
+                document.getElementById(tabId).classList.add("active");
+            });
+        });
+    });
+
+    document.getElementById("NoOfCanesForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const data = new FormData(this);
+    const acre = parseFloat(data.get("acre"));
+    const rowDist = parseFloat(data.get("rowDistance"));
+    const settDist = parseFloat(data.get("settDistance"));
+    const buds = parseFloat(data.get("NoOfBuds"));
+
+    const sqFtPerAcre = 43560;
+    const rows = (acre * sqFtPerAcre) / rowDist;
+    const settsPerRow = sqFtPerAcre / settDist;
+    const totalSetts = rows * settsPerRow * acre;
+    const estimatedCanes = totalSetts * buds * 0.75; // 75% germination
+
+    document.getElementById("NoOfCanesResult").innerText =
+        "Estimated Canes: " + Math.round(estimatedCanes).toLocaleString();
+});
+</script>
+
+<!-- chatbot -->
+<script>
+window.chatbotConfig = {
+    position: "top-right",
+    preprompt: "User is on sugarcane tillering stage page. Answer only about sugarcane stage 2 tillering."
+};
+</script>
+<link rel="stylesheet" href="/css/chatBotcss.css">
+<script src="/js/chatBotjs.js"></script>
+
+</body>
+</html>

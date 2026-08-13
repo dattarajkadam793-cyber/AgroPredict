@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Prediction Result</title>
+
+    <style>
+           :root {
+            --green-dark: #2e7d32;
+            --green-mid: #43a047;
+            --green-light: #e8f5e9;
+            --white: #ffffff;
+            --text-dark: #2f2f2f;
+
+            --shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+            --shadow-hover: 0 8px 22px rgba(0, 0, 0, 0.2);
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--green-light);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 40px 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        span {
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 32px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            background: #2e7d32;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        a:hover {
+            background: #1b5e20;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🌱 Predicted Crop</h2>
+
+    <h1>
+        Most Suitable Crop: <br>
+        <span th:text="${result}"></span>
+    </h1>
+
+    <a href="/Soilform">⬅ Go Back</a>
+</div>
+
+</body>
+</html>

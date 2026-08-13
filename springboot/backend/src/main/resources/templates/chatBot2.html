@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Chat Button */
+#chatBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #00ffbf;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 15px 18px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Chatbox */
+#chatbox {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 320px;
+  height: 420px;
+  
+  background: #ffffff;
+
+  /* 🔥 THIS is what you want */
+  border: 2px solid #e0e0e0;     /* visible border */
+  border-radius: 16px;           /* smooth rounded corners */
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25); /* depth */
+
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  z-index: 1000;
+}
+
+/* Header */
+#chatHeader {
+  background: #4CAF50;
+  color: white;
+  padding: 12px 15px;
+  font-weight: bold;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* rounded top corners */
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+/* Close button */
+#chatHeader span {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Chat Body */
+#chatBody {
+  height: 300px;
+  padding: 12px;
+  overflow-y: auto;
+  background: #f7f7f7;
+}
+
+/* Input section */
+#chatInput {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+/* Input */
+#chatInput input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+/* Send button */
+#chatInput button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+    </style>
+</head>
+
+
+
+
+
+
+<body>
+
+   <button id="chatBtn" onclick="toggleChat()">💬</button>
+
+<div id="chatbox">
+  <div id="chatHeader">
+    Agro Predict Bot 🌱
+    <span onclick="toggleChat()">✖</span>
+  </div>
+
+  <div id="chatBody">
+    <p>👋 Hi! Ask me anything.</p>
+  </div>
+
+  <div id="chatInput">
+    <input type="text"  id="userInput" placeholder="Type a message..." />
+    <button onclick="sendMessage()">➤</button>
+  </div>
+</div> 
+
+
+
+<script>
+
+// Open / Close chatbot
+function toggleChat() {
+  var chatbox = document.getElementById("chatbox");
+
+  if (chatbox.style.display === "block") {
+    chatbox.style.display = "none";
+  } else {
+    chatbox.style.display = "block";
+  }
+}
+
+
+// Send message to AI
+function sendMessage() {
+  var input = document.getElementById("userInput");
+  var chatBody = document.getElementById("chatBody");
+
+  var userText = input.value;
+
+  // check empty
+  if (userText === "") {
+    return;
+  }
+
+  // show user message
+  chatBody.innerHTML = chatBody.innerHTML + "<p><b>You:</b> " + userText + "</p>";
+
+  input.value = "";
+
+  // scroll down
+  chatBody.scrollTop = chatBody.scrollHeight;
+
+  // call API
+  fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer YOUR_OPENROUTER_API_KEY",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "openrouter/free",
+      messages: [
+        { role: "user", content: userText }
+      ]
+    })
+  })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(data) {
+
+    var botReply = "No response";
+
+    if (data.choices && data.choices.length > 0) {
+      botReply = data.choices[0].message.content;
+    }
+
+    // show bot reply
+    chatBody.innerHTML = chatBody.innerHTML + "<p><b>Bot:</b> " + botReply + "</p>";
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+  })
+  .catch(function(error) {
+    chatBody.innerHTML = chatBody.innerHTML + "<p style='color:red;'>Error</p>";
+    console.log(error);
+  });
+}
+
+</script>
+</body>
+</html>

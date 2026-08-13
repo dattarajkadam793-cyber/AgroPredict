@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normal Planting Process Guide</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f7f0;
+            color: #2d4a2d;
+            min-height: 100vh;
+        }
+
+        /* INFO BAR */
+        .info-bar {
+            background: #2e7d32;-
+            color: #fff;
+            padding: 24px 48px;
+            border-bottom: 3px solid #4caf50;
+        }
+        .info-bar h2 { font-size: 1.4rem; margin-bottom: 6px; }
+        .info-bar p  { font-size: 0.9rem; color: #c8e6c9; max-width: 860px; }
+
+        /* PAGE WRAPPER */
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 36px 48px 72px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .page-wrapper { padding: 24px 16px 48px; }
+        }
+
+        .section-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #5a7a5a;
+            font-weight: 700;
+        }
+
+        /* TWO-COLUMN GRID */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        @media (max-width: 640px) {
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+
+        /* CARDS */
+        .card {
+            background: #fff;
+            border: 1.5px solid #b7d9b7;
+            border-radius: 12px;
+            padding: 24px 28px;
+        }
+        .card.clickable { cursor: pointer; }
+        .card.clickable:hover { border-color: #4caf50; box-shadow: 0 4px 14px rgba(76,175,80,.13); }
+
+        .card-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .card-icon {
+            width: 44px; height: 44px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .card-text h3 { font-size: 1.05rem; font-weight: 700; color: #2e7d32; margin-bottom: 4px; }
+        .card-text p  { font-size: 0.88rem; color: #5a7a5a; line-height: 1.5; }
+        .card-arrow   { margin-left: auto; font-size: 1.3rem; color: #4caf50; }
+
+        /* ESTIMATE CARD */
+        .estimate-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .estimate-card .card-row { flex: 1; }
+
+        /* BUTTONS */
+        .btn-green {
+            background: #2e7d32;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 26px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s;
+            font-family: inherit;
+        }
+        .btn-green:hover { background: #1b5e20; }
+
+        /* REMINDER CARD */
+        .reminder-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .reminder-form input[type="email"] {
+            flex: 1;
+            min-width: 200px;
+            border: 1.5px solid #b7d9b7;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.93rem;
+            background: #f7fbf7;
+            outline: none;
+            font-family: inherit;
+        }
+        .reminder-form input[type="email"]:focus { border-color: #4caf50; }
+        .reminder-form input[type="submit"] {
+            background: #2e7d32;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 22px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .reminder-form input[type="submit"]:hover { background: #1b5e20; }
+        #emailReminderResult { margin-top: 10px; font-size: 0.88rem; color: #2e7d32; font-weight: 600; }
+
+        /* NEXT STAGE BUTTON */
+        .next-stage-btn {
+            background: #2e7d32;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: background .2s;
+            font-family: inherit;
+        }
+        .next-stage-btn:hover { background: #1b5e20; }
+
+        /* OVERLAYS */
+        #modalOverlay, #EstimateOverlay, #nextOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.45);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 32px 36px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-box h2 { font-size: 1.35rem; font-weight: 700; color: #2e7d32; margin-bottom: 14px; padding-right: 28px; }
+        .modal-box h3 {
+            font-size: 0.92rem; font-weight: 700; color: #388e3c;
+            margin-top: 18px; margin-bottom: 6px;
+            border-left: 3px solid #4caf50; padding-left: 10px;
+            text-transform: uppercase; letter-spacing: .5px;
+        }
+        .modal-box p { font-size: 0.9rem; line-height: 1.75; color: #3d5a3e; }
+
+        .close-btn {
+            position: absolute; top: 14px; right: 18px;
+            font-size: 1.5rem; font-weight: 700; color: #5a7a5a;
+            cursor: pointer; background: none; border: none; line-height: 1;
+        }
+        .close-btn:hover { color: #2e7d32; }
+
+        /* ESTIMATE FORM */
+        #estimateForm {
+            display: flex; flex-direction: column; gap: 12px; margin-top: 12px;
+        }
+        #estimateForm label { font-size: 0.9rem; color: #2d4a2d; font-weight: 600; }
+        #estimateForm input[type="number"] {
+            border: 1.5px solid #b7d9b7; border-radius: 8px;
+            padding: 10px 14px; font-size: 0.95rem;
+            background: #f7fbf7; outline: none; font-family: inherit;
+        }
+        #estimateForm input[type="number"]:focus { border-color: #4caf50; }
+        #estimateForm input[type="submit"] {
+            background: #2e7d32; color: #fff; border: none;
+            border-radius: 8px; padding: 11px; font-size: 1rem;
+            font-weight: 600; cursor: pointer; font-family: inherit;
+        }
+        #estimateForm input[type="submit"]:hover { background: #1b5e20; }
+        #estimateID { margin-top: 12px; font-size: 1rem; color: #2e7d32; font-weight: 700; }
+
+        /* YOUTUBE GRID */
+        .yt-grid { display: flex; gap: 16px; margin-top: 20px; flex-wrap: wrap; }
+        .yt-grid > div { flex: 1; min-width: 240px; }
+        .yt-grid h4 { font-size: 0.82rem; color: #5a7a5a; margin-bottom: 8px; text-transform: uppercase; }
+        .yt-grid iframe { width: 100%; height: 185px; border-radius: 10px; border: none; }
+    </style>
+</head>
+<body>
+
+<!-- INFO BAR -->
+<div class="info-bar">
+    <h2>🌱 Normal Planting Process — Stage 1</h2>
+    <p>This page guides you through every step of sugarcane planting: from selecting quality seed cane and preparing your soil to spacing, irrigation, and applying the right fertilizers for a healthy first crop.</p>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="page-wrapper">
+
+    <p class="section-label">📋 Planting Guide</p>
+
+    <div class="cards-grid">
+
+    <!-- Basic Info Card -->
+    <div class="card clickable" onclick="openModal()">
+        <div class="card-row">
+            <div class="card-icon">📖</div>
+            <div class="card-text">
+                <h3>Basic Planting Information</h3>
+                <p>Learn how to plant sugarcane — soil types, climate, varieties, spacing, irrigation, and fertilizer recommendations.</p>
+            </div>
+            <span class="card-arrow">›</span>
+        </div>
+    </div>
+
+    <!-- Next Process Card -->
+    <div class="card clickable" onclick="openNext()">
+        <div class="card-row">
+            <div class="card-icon">⚗️</div>
+            <div class="card-text">
+                <h3>Next Process: Planting &amp; Medicine</h3>
+                <p>Detailed steps on cutting setts, planting horizontally, and applying herbicide medicine on Day 2 after sowing.</p>
+            </div>
+            <span class="card-arrow">›</span>
+        </div>
+    </div>
+
+    </div><!-- end cards-grid -->
+
+    <!-- Estimate Card — full width -->
+    <div class="card estimate-card">
+        <div class="card-row">
+            <div class="card-icon">📐</div>
+            <div class="card-text">
+                <h3>Estimate Sugarcane Needed</h3>
+                <p>Enter your land area in acres to calculate the quantity of seed cane required for your farm.</p>
+            </div>
+        </div>
+        <button class="btn-green" onclick="openEstimate()">Calculate →</button>
+    </div>
+
+    <p class="section-label" style="margin-top:4px;">🔔 Stay Updated</p>
+
+    <!-- Reminder Card -->
+    <div class="card">
+        <div class="card-row">
+            <div class="card-icon">📬</div>
+            <div class="card-text">
+                <h3>Email Reminders</h3>
+                <p>Subscribe to receive timely notifications about watering schedules, fertilizer doses, and upcoming tasks for your crop.</p>
+            </div>
+        </div>
+        <form class="reminder-form" id="emailReminderForm">
+            <input type="email" name="email" placeholder="Your email address" required>
+            <input type="submit" value="Subscribe">
+        </form>
+        <p id="emailReminderResult"></p>
+    </div>
+
+    <!-- Next Stage Button -->
+    <button class="next-stage-btn" onclick="NextStage()">Proceed to Next Stage →</button>
+
+</div>
+
+
+<!-- BASIC INFO MODAL -->
+<div id="modalOverlay">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <h2>📖 Basic Planting Information</h2>
+
+        <h3>Planting Time</h3>
+        <p>Plant sugarcane between <strong>November and January</strong>.<br>
+        Special methods allow planting in August–September.<br>
+        Avoid planting during heavy rain or when the field has standing water.</p>
+
+        <h3>Soil &amp; Climate</h3>
+        <p>Use deep, fertile, well-drained soil. Clay loam or black soil is suitable in Kolhapur.<br>
+        Ensure warm climate and sufficient water throughout the crop period.</p>
+
+        <h3>Varieties (Types)</h3>
+        <p>Grow 86 varieties. Always select disease-free and healthy seed cane.<br>
+        Get approved varieties from your sugar factory or agriculture office.</p>
+
+        <h3>Spacing &amp; Planting</h3>
+        <p>Maintain <strong>75–90 cm</strong> row-to-row spacing.<br>
+        Use 2–3 bud setts for planting. Place setts in furrows and cover lightly with soil.</p>
+
+        <h3>Water / Irrigation</h3>
+        <p>Provide regular irrigation. Avoid over-irrigation and water stagnation.<br>
+        Use <strong>drip irrigation</strong> to save water and improve yield.</p>
+
+        <h3>Fertilizer &amp; Manure</h3>
+        <p>Apply FYM (shekhar khat) before planting.<br>
+        Use Nitrogen, Phosphorus, and Potash as recommended in 2–3 split doses.</p>
+
+        <h3>Ratoon Crop</h3>
+        <p>Allow the crop to regrow from old stubble after harvest.<br>
+        With good care, take 2–3 ratoon crops.</p>
+
+        <h3>Important Tips</h3>
+        <p>Always use healthy, good-quality seed cane. Do soil testing before deciding fertilizer dose.<br>
+        Keep the field weed-free during early growth.</p>
+
+        <div class="yt-grid">
+            <div>
+                <h4>▶ Horizontal Planting</h4>
+                <iframe src="https://www.youtube.com/embed/ZfTIyrGQ8Fc"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+            <div>
+                <h4>▶ Vertical Planting</h4>
+                <iframe src="https://www.youtube.com/embed/SQaDeJbozdg"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ESTIMATE OVERLAY -->
+<div id="EstimateOverlay">
+    <div class="modal-box" style="max-width:460px">
+        <button class="close-btn" onclick="closeEstimate()">×</button>
+        <h2>📐 Estimate Sugarcane Needed</h2>
+        <form id="estimateForm">
+            <label for="acreInput">How many acres of land do you want to farm?</label>
+            <input type="number" id="acreInput" name="acre" step="any" min="0.1" placeholder="e.g. 2.5" required>
+            <input type="submit" value="Calculate Estimate">
+        </form>
+        <p id="estimateID"></p>
+    </div>
+</div>
+
+
+<!-- NEXT PROCESS OVERLAY -->
+<div id="nextOverlay">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeNext()">×</button>
+        <h2>⚗️ Planting &amp; Medicine</h2>
+
+        <h3>Planting Steps</h3>
+        <p>Cut sugarcane into parts — each part should have <strong>3 buds</strong>.<br>
+        Lay sugarcane <strong>horizontally</strong> in the furrow with eyes/buds facing upward.</p>
+
+        <h3>Medicine / Herbicide</h3>
+        <p>Apply <strong>Goal Medicine</strong> or any approved herbicide on the farmland <strong>on the 2nd day after sowing</strong>.<br>
+        This controls weeds and protects early germination.</p>
+
+        <div class="yt-grid">
+            <div>
+                <h4>▶ Spraying Process</h4>
+                <iframe src="https://www.youtube.com/embed/XOm-Dv81FC8"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+            <div>
+                <h4>▶ Goal Medicine Info</h4>
+                <iframe src="https://www.youtube.com/embed/q9TfzSFLJLk"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function openModal()     { document.getElementById("modalOverlay").style.display = "flex"; }
+    function closeModal()    { document.getElementById("modalOverlay").style.display = "none"; }
+    function openEstimate()  { document.getElementById("EstimateOverlay").style.display = "flex"; }
+    function closeEstimate() { document.getElementById("EstimateOverlay").style.display = "none"; }
+    function openNext()      { document.getElementById("nextOverlay").style.display = "flex"; }
+    function closeNext()     { document.getElementById("nextOverlay").style.display = "none"; }
+    function NextStage()     { window.location.href = "/stage2"; }
+
+    document.getElementById("estimateForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        fetch("/normalPlanting", { method: "Post", body: formData })
+            .then(function(respone) { return respone.text(); })
+            .then(function(result) { document.getElementById("estimateID").innerText = result; })
+            .catch(err => console.error(err));
+    });
+
+    document.getElementById("emailReminderForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        fetch("/normalPlanting/reminder", { method: "POST", body: formData })
+            .then(function(respone) { return respone.text(); })
+            .then(function(result) { document.getElementById("emailReminderResult").innerText = result; })
+            .catch(err => console.error(err));
+    });
+
+    window.chatbotConfig = {
+        position: "top-right",
+        preprompt: "User is on sugarcane planting stage page. Answer only about planting, spacing, irrigation, fertilizers."
+    };
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .chatBot{
+            position: fixed;
+            bottom: 30px;
+            right:30px;
+        }
+        .modal{
+            border: solid;
+            height:400px;
+            width:400px;
+            border-radius: 5px;
+        }
+        .chatBody{
+            border: solid;
+            height: 270px;
+        }
+        .chatHeader{
+            border: solid;
+            height:60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+        .chatHeader h2{
+            position: absolute;
+            left: 10px;
+        }
+        .closeBtn{
+            position: absolute;
+              cursor: pointer;
+            font-size: 25px;
+            right:18px;
+        }
+
+    </style>
+
+</head>
+<body>
+    <div class="chatBot"> 
+    💬
+    </div>
+    <div class="overlay">
+
+        <div class="modal">
+
+            <div class="chatHeader">
+                <h2>AgroPredict</h2>
+                <span class="closeBtn">✖</span>
+            </div>
+
+            <div class="chatBody">Body</div>
+
+            <div class="chatInput">
+                <input type="text" placeholder="ask me ..">
+                <button>➤</button>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

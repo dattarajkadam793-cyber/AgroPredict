@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sugarcane – Grand Growth Stage</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #1b5e20;
+      --green-mid:    #2e7d32;
+      --green-light:  #4caf50;
+      --green-pale:   #e8f5e9;
+      --green-border: #c8e6c9;
+      --text-main:    #1a2a1b;
+      --text-soft:    #4a5e4b;
+      --bg:           #f4faf5;
+      --white:        #ffffff;
+      --warn-red:     #c62828;
+      --warn-bg:      #ffebee;
+      --advisory-bg:  #fffde7;
+      --advisory-bdr: #ffe082;
+      --advisory-txt: #e65100;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      padding-bottom: 80px;
+      min-height: 100vh;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #388e3c 100%);
+      color: #fff;
+      text-align: center;
+      padding: 3rem 1.5rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .page-header .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 24px;
+      padding: 5px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      margin-bottom: 14px;
+    }
+    .page-header h1 {
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -.3px;
+    }
+    .page-header p {
+      font-size: 14px;
+      opacity: .85;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .page-header p span { opacity: .5; }
+
+    /* ===== SECTION LABEL ===== */
+    .section-label {
+      max-width: 1060px;
+      margin: 2.5rem auto 1rem;
+      padding: 0 24px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1.5px;
+      background: var(--green-border);
+      border-radius: 2px;
+    }
+
+    /* ===== CARDS GRID ===== */
+    .cards-row {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .cards-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 520px) {
+      .cards-row { grid-template-columns: 1fr; }
+    }
+
+    .topic-card {
+      background: var(--white);
+      border: 1.5px solid var(--green-border);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .topic-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(46,125,50,.15);
+      border-color: var(--green-mid);
+    }
+    .card-top {
+      background: linear-gradient(135deg, var(--green-mid), #388e3c);
+      color: #fff;
+      padding: 18px 20px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .card-top .icon {
+      font-size: 30px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.2));
+    }
+    .card-top h3  { font-size: 15px; font-weight: 700; line-height: 1.3; }
+    .card-top p   { font-size: 11.5px; opacity: .78; margin-top: 3px; font-weight: 500; }
+    .card-bottom  { padding: 16px 20px 18px; flex: 1; display: flex; flex-direction: column; }
+    .card-bottom .desc { font-size: 13px; color: var(--text-soft); line-height: 1.65; flex: 1; }
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 14px;
+      background: var(--green-pale);
+      color: var(--green-dark);
+      border: 1px solid var(--green-border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      transition: background .15s, color .15s, border-color .15s;
+      width: fit-content;
+    }
+    .topic-card:hover .card-cta {
+      background: var(--green-mid);
+      color: #fff;
+      border-color: var(--green-mid);
+    }
+
+    /* ===== NEXT BUTTON ===== */
+    .next-row { text-align: center; margin-top: 3rem; }
+    .btn-next {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-mid);
+      color: #fff;
+      border-radius: 12px;
+      padding: 14px 40px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background .15s, transform .15s;
+      box-shadow: 0 4px 16px rgba(46,125,50,.3);
+    }
+    .btn-next:hover { background: var(--green-dark); transform: translateY(-2px); }
+
+    /* ===== OVERLAY ===== */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 24px 16px 40px;
+      backdrop-filter: blur(2px);
+    }
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+      box-shadow: 0 24px 64px rgba(0,0,0,.25);
+      overflow: hidden;
+    }
+    .modal-head {
+      background: linear-gradient(135deg, var(--green-mid), #388e3c);
+      color: #fff;
+      padding: 22px 60px 22px 26px;
+      position: relative;
+    }
+    .modal-head h2 { font-size: 19px; font-weight: 700; }
+    .modal-head p  { font-size: 12px; opacity: .78; margin-top: 4px; font-weight: 500; }
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 18px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.32); }
+    .modal-body { padding: 24px 26px 32px; }
+
+    /* ===== INNER GRIDS ===== */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    @media (max-width: 600px) {
+      .grid2 { grid-template-columns: 1fr; }
+      .grid3 { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 400px) {
+      .grid3 { grid-template-columns: 1fr; }
+    }
+
+    .icard {
+      background: #f1f8f2;
+      border: 1.5px solid var(--green-border);
+      border-radius: 11px;
+      padding: 14px 16px;
+    }
+    .icard h3 { font-size: 13.5px; font-weight: 700; color: var(--green-dark); margin-bottom: 8px; }
+    .icard ul { padding-left: 16px; font-size: 13px; line-height: 1.9; color: #444; }
+    .icard p  { font-size: 13px; line-height: 1.65; color: #444; }
+    .icard ol { padding-left: 18px; font-size: 13px; line-height: 2.2; color: #444; }
+
+    .icard.warn { border-left: 4px solid var(--warn-red); background: var(--warn-bg); }
+    .icard.warn h3 { color: var(--warn-red); }
+    .icard.nc-n h3 { color: #1565c0; }
+    .icard.nc-p h3 { color: #6a1b9a; }
+    .icard.nc-k h3 { color: #e65100; }
+    .dose { font-weight: 700; font-size: 15px; margin-top: 10px; color: var(--green-mid); }
+
+    /* ===== SECTION HEADING INSIDE MODAL ===== */
+    .sec { margin-top: 24px; }
+    .sec h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--green-mid);
+      border-bottom: 2px solid var(--green-border);
+      padding-bottom: 7px;
+      margin-bottom: 14px;
+      letter-spacing: .3px;
+    }
+
+    /* ===== TABLE ===== */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; border-radius: 8px; overflow: hidden; }
+    th { background: var(--green-mid); color: #fff; padding: 10px 14px; border: 1px solid #1b5e20; text-align: center; font-weight: 600; }
+    td { padding: 9px 14px; border: 1px solid var(--green-border); text-align: center; color: #444; }
+    tr:nth-child(even) td { background: var(--green-pale); }
+    tr.hl td { background: #fff9c4; font-weight: 700; color: var(--green-dark); }
+
+    /* ===== ADVISORY ===== */
+    .advisory {
+      background: var(--advisory-bg);
+      border: 1.5px solid var(--advisory-bdr);
+      border-radius: 11px;
+      padding: 14px 18px;
+      margin-top: 20px;
+    }
+    .advisory h3 { font-size: 14px; color: var(--advisory-txt); margin-bottom: 8px; font-weight: 700; }
+    .advisory ul { padding-left: 18px; font-size: 13px; line-height: 1.95; color: #444; }
+
+    /* ===== FERTILIZER CARDS ===== */
+    .fert-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
+    .fert-card {
+      flex: 1 1 calc(50% - 7px);
+      min-width: 150px;
+      text-align: center;
+      border-radius: 12px;
+      padding: 20px 14px;
+      border: 2px solid;
+    }
+    .fert-card .fname { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .fert-card .fdose { font-size: 30px; font-weight: 800; }
+    .fert-card .funit { font-size: 11.5px; margin-top: 4px; opacity: .75; font-weight: 500; }
+
+    /* ===== DISEASE CARDS ===== */
+    .dis-card {
+      background: var(--white);
+      border: 1.5px solid var(--green-border);
+      border-radius: 11px;
+      overflow: hidden;
+    }
+    .dis-img {
+      width: 100%; height: 130px;
+      object-fit: cover;
+      display: block;
+      background: var(--green-pale);
+    }
+    .dis-body { padding: 10px 14px 14px; }
+    .dis-name { display: block; font-size: 14px; font-weight: 700; color: var(--green-dark); margin-bottom: 7px; }
+    .dis-tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px; margin-bottom: 5px;
+    }
+    .tag-sym  { background: #fff3e0; color: #e65100; }
+    .tag-ctrl { background: var(--green-pale); color: var(--green-mid); }
+    .dis-body p { font-size: 12px; line-height: 1.65; color: #555; margin-bottom: 8px; }
+
+    /* ===== WEED CARDS ===== */
+    .weed-card {
+      background: var(--white);
+      border: 1.5px solid var(--green-border);
+      border-radius: 11px;
+      overflow: hidden;
+    }
+    .weed-head-bar {
+      background: linear-gradient(135deg, var(--green-mid), #388e3c);
+      color: #fff;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .weed-body { padding: 14px 16px; }
+    .weed-body p { font-size: 13px; color: #555; margin-bottom: 10px; line-height: 1.65; }
+    .adv { font-size: 12.5px; margin-top: 8px; line-height: 1.6; }
+    .adv .pos { color: var(--green-mid); font-weight: 700; }
+    .adv .neg { color: var(--warn-red); font-weight: 700; }
+
+    /* ===== IRRIGATION CARDS ===== */
+    .irr-card {
+      background: var(--white);
+      border: 1.5px solid var(--green-border);
+      border-radius: 11px;
+      overflow: hidden;
+    }
+    .irr-img {
+      width: 100%; height: 150px;
+      object-fit: cover;
+      display: block;
+      background: var(--green-pale);
+    }
+    .irr-body { padding: 12px 14px; }
+    .irr-body h4 { font-size: 13px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+    .irr-body p  { font-size: 12px; color: #555; line-height: 1.6; }
+    .rec-badge {
+      display: inline-block;
+      background: var(--green-mid); color: #fff;
+      font-size: 10px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+      margin-bottom: 6px;
+      letter-spacing: .3px;
+    }
+
+    /* ===== VIDEO ===== */
+    .vid-wrap { margin-top: 22px; text-align: center; }
+    .vid-thumb {
+      position: relative;
+      display: inline-block;
+      width: min(68%, 480px);
+      cursor: pointer;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,.15);
+      transition: transform .15s;
+    }
+    .vid-thumb:hover { transform: scale(1.02); }
+    .vid-thumb img { width: 100%; display: block; }
+    .vid-play {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(0,0,0,.65);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; color: #fff;
+      transition: background .15s;
+    }
+    .vid-thumb:hover .vid-play { background: rgba(46,125,50,.85); }
+    .vid-caption { font-size: 12px; color: #666; margin-top: 10px; }
+
+    /* ===== SCROLLBAR ===== */
+    .overlay::-webkit-scrollbar { width: 6px; }
+    .overlay::-webkit-scrollbar-track { background: transparent; }
+    .overlay::-webkit-scrollbar-thumb { background: var(--green-border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="badge">🌿 Phase 2 — Stage 3</div>
+  <h1>🌾 Sugarcane Grand Growth Stage</h1>
+  <p>120 – 270 days after planting <span>|</span> Peak growth &amp; nutrient demand</p>
+</div>
+
+<div class="section-label">What farmers must do</div>
+
+<!-- CARDS GRID -->
+<div class="cards-row">
+
+  <div class="topic-card" onclick="OpenBasic()">
+    <div class="card-top"><div class="icon">📋</div><div><h3>Basic Stage Info</h3><p>Grand Growth Stage</p></div></div>
+    <div class="card-bottom"><p class="desc">Duration, key characteristics, physiological importance, field operations &amp; critical notes.</p><div class="card-cta">View Details →</div></div>
+  </div>
+
+  <div class="topic-card" onclick="OpenWater()">
+    <div class="card-top"><div class="icon">💧</div><div><h3>Water Management</h3><p>Grand Growth Stage</p></div></div>
+    <div class="card-bottom"><p class="desc">Irrigation schedule by soil type, daily water requirement, drip, furrow &amp; sprinkler methods.</p><div class="card-cta">View Details →</div></div>
+  </div>
+
+  <div class="topic-card" onclick="OpenNutrient()">
+    <div class="card-top"><div class="icon">🧪</div><div><h3>Nutrient Management</h3><p>Grand Growth Stage</p></div></div>
+    <div class="card-bottom"><p class="desc">N, P, K requirements with doses, fertilizer recommendation table &amp; farmer advisory notes.</p><div class="card-cta">View Details →</div></div>
+  </div>
+
+  <div class="topic-card" onclick="OpenDisease()">
+    <div class="card-top"><div class="icon">🌿</div><div><h3>Diseases &amp; Pests</h3><p>4–7 Months After Planting</p></div></div>
+    <div class="card-bottom"><p class="desc">9 major diseases with symptoms &amp; management — Red Rot, Smut, Wilt, Borers &amp; more.</p><div class="card-cta">View Details →</div></div>
+  </div>
+
+  <div class="topic-card" onclick="OpenWeed()">
+    <div class="card-top"><div class="icon">🌱</div><div><h3>Weeding Methods</h3><p>Grand Growth Stage</p></div></div>
+    <div class="card-bottom"><p class="desc">Manual, mechanical &amp; chemical weeding methods with advantages, disadvantages &amp; video.</p><div class="card-cta">View Details →</div></div>
+  </div>
+
+  <div class="topic-card" onclick="OpenMothi()">
+    <div class="card-top"><div class="icon">🌾</div><div><h3>Mothi Bharani Guide</h3><p>Second Major Fertilizer Stage</p></div></div>
+    <div class="card-bottom"><p class="desc">Complete guide — timing, fertilizer doses, application method &amp; precautions.</p><div class="card-cta">View Details →</div></div>
+  </div>
+
+</div>
+
+<div class="next-row"><a href="/maturity" class="btn-next">Next Stage →</a></div>
+
+
+<!-- ===== BASIC INFO OVERLAY ===== -->
+<div class="overlay" id="basicOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <button class="modal-close" onclick="CloseBasic()">✕</button>
+      <h2>📋 Basic Stage Information</h2>
+      <p>Grand Growth Stage — Key Facts</p>
+    </div>
+    <div class="modal-body">
+      <div class="grid2">
+        <div class="icard"><h3>Duration</h3><p>120 – 270 days after planting<br>(varies by variety &amp; climate)</p></div>
+        <div class="icard"><h3>Key Characteristics</h3><ul><li>Rapid elongation of cane</li><li>Maximum internode development</li><li>Fast height increase</li><li>Highest leaf area index</li><li>Canopy closes &amp; suppresses weeds</li></ul></div>
+        <div class="icard"><h3>Physiological Importance</h3><ul><li>Contributes 70–75% of total yield</li><li>High photosynthetic activity</li><li>Maximum biomass accumulation</li><li>Tillering stabilizes</li></ul></div>
+        <div class="icard"><h3>Water Requirement</h3><ul><li>Highest water demand period</li><li>Moisture stress severely reduces yield</li><li>Regular irrigation essential</li></ul></div>
+        <div class="icard"><h3>Nutrient Requirement</h3><ul><li>Peak nutrient uptake stage</li><li>High requirement of N &amp; K</li><li>Final split dose of nitrogen applied</li></ul></div>
+        <div class="icard"><h3>Pest &amp; Disease Incidence</h3><ul><li>Top borer</li><li>Internode borer</li><li>Pyrilla infestation common</li></ul></div>
+        <div class="icard"><h3>Field Operations</h3><ul><li>Earthing up to support canes</li><li>Trash mulching for moisture conservation</li><li>Proper drainage during rainy season</li></ul></div>
+        <div class="icard warn"><h3>⚠ Critical Importance</h3><p>Stress at this stage causes <strong>irreversible yield loss</strong>. Directly affects cane length, weight, and final yield.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== WATER OVERLAY ===== -->
+<div class="overlay" id="waterOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <button class="modal-close" onclick="CloseWater()">✕</button>
+      <h2>💧 Water Management</h2>
+      <p>Grand Growth Stage</p>
+    </div>
+    <div class="modal-body">
+      <div class="grid2">
+        <div class="icard">
+          <h3>Water Requirement</h3>
+          <p><strong>Total:</strong> ~1000 mm (Grand Growth Stage)<br><strong>Daily:</strong> 4 – 7 mm/day<br>Higher need in hot &amp; dry weather</p>
+          <p style="font-weight:700;font-size:13px;margin-top:12px;margin-bottom:6px;color:#1b5e20;">Factors affecting irrigation:</p>
+          <ul><li>Soil type &amp; water holding capacity</li><li>Temperature &amp; humidity</li><li>Evapotranspiration (ET)</li><li>Irrigation method (drip saves water)</li></ul>
+        </div>
+        <div class="icard">
+          <h3>Irrigation Schedule by Soil Type</h3>
+          <table>
+            <tr><th>Soil Type</th><th>Interval</th></tr>
+            <tr><td>Black Cotton Soil</td><td>7 – 12 days</td></tr>
+            <tr><td>Brown Loam</td><td>5 – 7 days</td></tr>
+            <tr><td>Red Soil</td><td>3 – 5 days</td></tr>
+          </table>
+          <p style="font-size:12px;margin-top:10px;color:#666;">Black soil holds moisture longer · Red soil needs frequent watering</p>
+        </div>
+      </div>
+      <div class="sec">
+        <h3>Irrigation Methods</h3>
+        <div class="grid3">
+          <div class="irr-card">
+            <img class="irr-img" src="stage3drip.webp" alt="Drip Irrigation">
+            <div class="irr-body"><div class="rec-badge">✅ Recommended</div><h4>Drip Irrigation</h4><p>Saves water efficiently · Reduces weed growth · Delivers nutrients uniformly</p></div>
+          </div>
+          <div class="irr-card">
+            <img class="irr-img" src="stage3furrow.webp" alt="Furrow Irrigation">
+            <div class="irr-body"><h4>Furrow Irrigation</h4><p>Proper field leveling required · Uniform furrow depth needed · Avoid water stagnation</p></div>
+          </div>
+          <div class="irr-card">
+            <img class="irr-img" src="stage3sprinkler.webp" alt="Sprinkler Irrigation">
+            <div class="irr-body"><h4>Sprinkler Irrigation</h4><p>Good for uneven land · Moderate water efficiency · Works like rainfall</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== NUTRIENT OVERLAY ===== -->
+<div class="overlay" id="nutrientOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <button class="modal-close" onclick="CloseNutrient()">✕</button>
+      <h2>🧪 Nutrient Management</h2>
+      <p>Grand Growth Stage of Sugarcane</p>
+    </div>
+    <div class="modal-body">
+      <div class="grid3">
+        <div class="icard nc-n"><h3>Nitrogen (N)</h3><ul><li>Rapid stalk &amp; leaf growth</li><li>Increases height &amp; thickness</li><li>Maintains green leaves</li></ul><div class="dose">90 – 110 kg / acre</div></div>
+        <div class="icard nc-p"><h3>Phosphorus (P)</h3><ul><li>Strong root system</li><li>Better nutrient uptake</li><li>Energy transfer</li></ul><div class="dose">25 – 30 kg / acre</div></div>
+        <div class="icard nc-k"><h3>Potassium (K)</h3><ul><li>Strong cane stalks</li><li>Water regulation</li><li>Disease resistance</li></ul><div class="dose">45 – 55 kg / acre</div></div>
+      </div>
+      <div class="sec">
+        <h3>Fertilizer Recommendation Table</h3>
+        <table>
+          <tr><th>Nutrient</th><th>Required (kg/acre)</th><th>Fertilizer</th><th>Dose (kg/acre)</th></tr>
+          <tr><td>N</td><td>90 – 110</td><td>Urea</td><td>195 – 240</td></tr>
+          <tr><td>P</td><td>25 – 30</td><td>DAP</td><td>55 – 65</td></tr>
+          <tr><td>K</td><td>45 – 55</td><td>MOP</td><td>75 – 90</td></tr>
+        </table>
+      </div>
+      <div class="advisory">
+        <h3>🌾 Farmer Advisory</h3>
+        <ul>
+          <li>Apply fertilizers in split doses</li>
+          <li>Follow soil test recommendations</li>
+          <li>Avoid excess nitrogen</li>
+          <li>Balanced nutrition improves yield</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== DISEASE OVERLAY ===== -->
+<div class="overlay" id="diseaseOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <button class="modal-close" onclick="CloseDisease()">✕</button>
+      <h2>🌿 Diseases &amp; Pests</h2>
+      <p>Grand Growth Stage (4–7 Months After Planting)</p>
+    </div>
+    <div class="modal-body">
+      <div class="grid3">
+
+        <div class="dis-card">
+          <img class="dis-img" src="stage3red rot.webp" alt="Red Rot">
+          <div class="dis-body"><span class="dis-name">Red Rot</span><span class="dis-tag tag-sym">Symptoms</span><p>Red colour inside cane with white patches. Leaves turn orange → yellow → dry. Alcohol smell.</p><span class="dis-tag tag-ctrl">Control</span><p>Use disease-free setts. Remove infected clumps. Avoid ratoon in infected field.</p></div>
+        </div>
+
+        <div class="dis-card">
+          <img class="dis-img" src="stage3smut.jpg" alt="Smut">
+          <div class="dis-body"><span class="dis-name">Smut</span><span class="dis-tag tag-sym">Symptoms</span><p>Black whip-like structure from top. Thin weak tillers. Reduced cane growth.</p><span class="dis-tag tag-ctrl">Control</span><p>Plant healthy setts. Remove &amp; burn infected whips. Grow resistant varieties.</p></div>
+        </div>
+
+        <div class="dis-card">
+          <img class="dis-img" src="stage3wilt.webp" alt="Wilt">
+          <div class="dis-body"><span class="dis-name">Wilt</span><span class="dis-tag tag-sym">Symptoms</span><p>Yellowing &amp; drying of leaves. Hollow stalk with reddish colour. Plant dries slowly.</p><span class="dis-tag tag-ctrl">Control</span><p>Avoid wilt-sick soil. Remove infected stubbles. Use healthy planting material.</p></div>
+        </div>
+
+        <div class="dis-card">
+          <img class="dis-img" src="stage3pokah.webp" alt="Pokkah Boeng">
+          <div class="dis-body"><span class="dis-name">Pokkah Boeng</span><span class="dis-tag tag-sym">Symptoms</span><p>Yellow patches on leaves. Leaves twist &amp; wrinkle. Top rot in severe cases.</p><span class="dis-tag tag-ctrl">Control</span><p>Remove infected tops. Maintain field sanitation. Spray recommended fungicide.</p></div>
+        </div>
+
+        <div class="dis-card">
+          <img class="dis-img" src="stage3mosaic.webp" alt="Mosaic">
+          <div class="dis-body"><span class="dis-name">Mosaic</span><span class="dis-tag tag-sym">Symptoms</span><p>Yellow &amp; green stripes on leaves. Stunted plant growth. Weak stalk formation.</p><span class="dis-tag tag-ctrl">Control</span><p>Use virus-free setts. Control aphids. Remove infected plants.</p></div>
+        </div>
+
+        <div class="dis-card">
+          <img class="dis-img" src="stage3grassyshoot.webp" alt="Grassy Shoot">
+          <div class="dis-body"><span class="dis-name">Grassy Shoot</span><span class="dis-tag tag-sym">Symptoms</span><p>Many thin grassy tillers. Pale yellow leaves. No proper cane formation.</p><span class="dis-tag tag-ctrl">Control</span><p>Use disease-free setts. Remove infected clumps. Hot water treatment of setts.</p></div>
+        </div>
+
+        <div class="dis-card">
+          <img class="dis-img" src="stage3ratoonstuning.webp" alt="Ratoon Stunting">
+          <div class="dis-body"><span class="dis-name">Ratoon Stunting</span><span class="dis-tag tag-sym">Symptoms</span><p>Stunted plant height. Thin stalks. Poor tiller formation.</p><span class="dis-tag tag-ctrl">Control</span><p>Use clean seed cane. Sterilize cutting tools. Avoid infected ratoon crop.</p></div>
+        </div>
+
+        <div class="dis-card">
+          <img class="dis-img" src="stage3leafscald.jpg" alt="Leaf Scald">
+          <div class="dis-body"><span class="dis-name">Leaf Scald</span><span class="dis-tag tag-sym">Symptoms</span><p>White streaks on leaves. Yellow leaf margins. Leaf drying in severe cases.</p><span class="dis-tag tag-ctrl">Control</span><p>Use disease-free material. Remove infected plants. Grow resistant varieties.</p></div>
+        </div>
+
+        <div class="dis-card">
+          <img class="dis-img" src="stage3borer.webp" alt="Sugarcane Borers">
+          <div class="dis-body"><span class="dis-name">Sugarcane Borers</span><span class="dis-tag tag-sym">Symptoms</span><p>Dead heart in young plants. Bore holes with frass. Bunchy top in mature cane.</p><span class="dis-tag tag-ctrl">Control</span><p>Use resistant varieties. Release Trichogramma. Apply recommended insecticide.</p></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== WEED OVERLAY ===== -->
+<div class="overlay" id="weedOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <button class="modal-close" onclick="CloseWeed()">✕</button>
+      <h2>🌱 Weeding in Grand Growth Stage</h2>
+      <p>Methods, Advantages &amp; Management</p>
+    </div>
+    <div class="modal-body">
+      <div class="grid3">
+        <div class="weed-card">
+          <div class="weed-head-bar">Manual Weeding</div>
+          <div class="weed-body"><p>Hand hoe (khurpi) or spade between rows. Suitable for small fields &amp; low weed density.</p><div class="adv"><span class="pos">✔ Advantages:</span><br>No chemical damage, safe for crop &amp; soil</div><div class="adv"><span class="neg">✘ Disadvantages:</span><br>Labour-intensive, time-consuming, costly for large fields</div></div>
+        </div>
+        <div class="weed-card">
+          <div class="weed-head-bar">Mechanical Weeding</div>
+          <div class="weed-body"><p>Power weeder / tractor-mounted weeder. Removes weeds between rows &amp; loosens soil.</p><div class="adv"><span class="pos">✔ Advantages:</span><br>Fast, effective, saves labour, suitable for large fields</div><div class="adv"><span class="neg">✘ Disadvantages:</span><br>Can't remove weeds near base; risk of root damage</div></div>
+        </div>
+        <div class="weed-card">
+          <div class="weed-head-bar">Chemical Weeding</div>
+          <div class="weed-body"><p>Post-emergence herbicides for heavy weed infestation. Needs correct dose &amp; timing.</p><div class="adv"><span class="pos">✔ Advantages:</span><br>Saves time &amp; labour, effective for heavy infestation</div><div class="adv"><span class="neg">✘ Disadvantages:</span><br>Crop injury risk, environmental pollution, precise use needed</div></div>
+        </div>
+      </div>
+      <div class="vid-wrap">
+        <div class="vid-thumb" onclick="window.open('https://youtu.be/1OqUU1pLJ1s','_blank')">
+          <img src="https://img.youtube.com/vi/1OqUU1pLJ1s/hqdefault.jpg" alt="Weeding video">
+          <div class="vid-play">▶</div>
+        </div>
+        <p class="vid-caption">▶ Watch: Weeding practices in sugarcane grand growth stage</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== MOTHI BHARANI OVERLAY ===== -->
+<div class="overlay" id="mothiOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <button class="modal-close" onclick="CloseMothi()">✕</button>
+      <h2>🌾 Mothi Bharani Guide</h2>
+      <p>Second Major Fertilizer Stage</p>
+    </div>
+    <div class="modal-body">
+      <div class="grid2">
+        <div class="icard"><h3>What is Mothi Bharani?</h3><ul><li>Second &amp; major fertilizer application stage</li><li>Tiller count already fixed</li><li>Rapid vegetative growth phase</li><li>High nutrient demand period</li></ul></div>
+        <div class="icard"><h3>⏱ Timing &amp; Conditions</h3><ul><li>75 – 120 days after planting</li><li>Healthy &amp; uniform tillers present</li><li>Moist soil condition required</li></ul></div>
+      </div>
+
+      <div class="sec">
+        <h3>Position in Lifecycle</h3>
+        <table>
+          <tr><th>Stage</th><th>Operation</th></tr>
+          <tr><td>Planting</td><td>Basal Dose</td></tr>
+          <tr><td>Early Tillering</td><td>Balbharani</td></tr>
+          <tr class="hl"><td><strong>Advanced Tillering</strong></td><td><strong>Mothi Bharani ← You are here</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="sec">
+        <h3>Fertilizer Dose (per acre)</h3>
+        <div class="fert-row">
+          <div class="fert-card" style="background:#e3f2fd;border-color:#1565c0;">
+            <div class="fname" style="color:#1565c0;">Urea</div>
+            <div class="fdose" style="color:#1565c0;">125–150 kg</div>
+            <div class="funit" style="color:#1565c0;">per acre</div>
+          </div>
+          <div class="fert-card" style="background:#fff3e0;border-color:#e65100;">
+            <div class="fname" style="color:#e65100;">MOP (Potash)</div>
+            <div class="fdose" style="color:#e65100;">50 kg</div>
+            <div class="funit" style="color:#e65100;">per acre</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <h3>Application Method</h3>
+        <div class="icard">
+          <ol><li>Apply fertilizer beside cane rows</li><li>Cover properly with soil (earthing-up)</li><li>Give light irrigation after application</li></ol>
+        </div>
+      </div>
+
+      <div class="sec">
+        <h3>Micronutrients</h3>
+        <div class="grid3">
+          <div class="icard"><h3>Zinc</h3><p>Deficiency causes pale leaves</p></div>
+          <div class="icard"><h3>Iron</h3><p>Yellowing of young leaves</p></div>
+          <div class="icard"><h3>Magnesium</h3><p>Chlorosis in older leaves</p></div>
+        </div>
+      </div>
+
+      <div class="advisory">
+        <h3>⚠ Precautions</h3>
+        <ul>
+          <li>Avoid excess nitrogen</li>
+          <li>Prevent water stagnation after application</li>
+          <li>Do not delay application</li>
+          <li>Follow soil test recommendation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  /* ===== OVERLAY OPEN / CLOSE FUNCTIONS ===== */
+  function OpenBasic()    { document.getElementById('basicOverlay').style.display    = 'block'; }
+  function CloseBasic()   { document.getElementById('basicOverlay').style.display    = 'none';  }
+  function OpenWater()    { document.getElementById('waterOverlay').style.display    = 'block'; }
+  function CloseWater()   { document.getElementById('waterOverlay').style.display    = 'none';  }
+  function OpenNutrient() { document.getElementById('nutrientOverlay').style.display = 'block'; }
+  function CloseNutrient(){ document.getElementById('nutrientOverlay').style.display = 'none';  }
+  function OpenDisease()  { document.getElementById('diseaseOverlay').style.display  = 'block'; }
+  function CloseDisease() { document.getElementById('diseaseOverlay').style.display  = 'none';  }
+  function OpenWeed()     { document.getElementById('weedOverlay').style.display     = 'block'; }
+  function CloseWeed()    { document.getElementById('weedOverlay').style.display     = 'none';  }
+  function OpenMothi()    { document.getElementById('mothiOverlay').style.display    = 'block'; }
+  function CloseMothi()   { document.getElementById('mothiOverlay').style.display    = 'none';  }
+
+  /* Close overlay on backdrop click */
+  document.querySelectorAll('.overlay').forEach(function(ov) {
+    ov.addEventListener('click', function(e) {
+      if (e.target === ov) ov.style.display = 'none';
+    });
+  });
+
+  /* ===== ORIGINAL JS — UNCHANGED ===== */
+  function sw(id, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+    document.querySelectorAll('.tab-row button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('show');
+    btn.classList.add('active');
+  }
+
+  function openModal()     { document.getElementById("modalOverlay").style.display = "flex"; }
+  function closeModal()    { document.getElementById("modalOverlay").style.display = "none"; }
+  function openEstimate()  { document.getElementById("EstimateOverlay").style.display = "flex"; }
+  function closeEstimate() { document.getElementById("EstimateOverlay").style.display = "none"; }
+  function openNext()      { document.getElementById("nextOverlay").style.display = "flex"; }
+  function closeNext()     { document.getElementById("nextOverlay").style.display = "none"; }
+  function NextStage()     { window.location.href = "/stage2"; }
+
+  window.chatbotConfig = {
+    position: "top-right",
+    preprompt: "User is on sugarcane planting stage page. Answer only about planting, spacing, irrigation, fertilizers."
+  };
+</script>
+
+</body>
+</html>

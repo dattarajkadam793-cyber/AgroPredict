@@ -1,0 +1,122 @@
+<div th:fragment="header(showButtons)">
+
+    <!-- Google Translate container -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <style>
+        .goog-te-banner-frame,
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+            height: 0 !important;
+        }
+
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        div#goog-gt- {
+            display: none !important;
+        }
+
+        .goog-te-gadget {
+            display: none !important;
+        }
+
+        html, body {
+            top: 0 !important;
+            margin-top: 0 !important;
+        }
+
+        /* Force hide BEFORE render */
+        .goog-te-banner-frame,
+        .goog-te-banner-frame.skiptranslate,
+        iframe.goog-te-banner-frame {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+        }
+
+        body > .skiptranslate {
+            display: none !important;
+        }
+.lang-btn-container {
+    position: fixed;
+    top: 90px;        /* below navbar */
+    left: 20px;
+    z-index: 999999;
+}
+
+.lang-btn-container button {
+    display: block;
+    padding: 15px 18px;
+    margin: 10px 0;
+    background: white;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+    </style>
+
+
+    <div th:if="${showButtons}" class="lang-btn-container">
+        <button onclick="setLanguage('en')">English</button>
+        <button onclick="setLanguage('mr')">मराठी</button>
+        <button onclick="setLanguage('hi')">हिंदी</button>
+    </div>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,mr,hi',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem("lang", lang);
+
+            var interval = setInterval(function () {
+                var select = document.querySelector(".goog-te-combo");
+
+                if (select) {
+                    select.value = lang;
+                    select.dispatchEvent(new Event("change"));
+                    clearInterval(interval);
+                }
+            }, 300);
+        }
+
+
+        function hideGoogleBar() {
+    document.body.style.top = "0px";
+    document.body.style.marginTop = "0px";
+    document.documentElement.style.top = "0px";
+
+    document.querySelectorAll("iframe").forEach(function (frame) {
+        var cls = frame.className || "";
+        var id = frame.id || "";
+
+        if (cls.includes("goog") || id.includes("goog") || cls.includes("skiptranslate")) {
+            frame.style.setProperty("display", "none", "important");
+            frame.style.setProperty("height", "0", "important");
+            frame.style.setProperty("width", "0", "important");
+        }
+    });
+
+    document.querySelectorAll(".goog-te-banner-frame, #goog-gt-tt, .skiptranslate")
+        .forEach(function (el) {
+            if (el.id !== "google_translate_element") {
+                el.style.setProperty("display", "none", "important");
+            }
+        });
+}
+
+setInterval(hideGoogleBar, 800);
+
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(hideGoogleBar, 500);
+});
+    </script>
+</div>

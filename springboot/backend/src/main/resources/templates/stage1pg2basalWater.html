@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sugarcane Management</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f7f0;color:#1a2e1a}
+
+.top-bar{
+  background:#1b5e20;
+  color:#fff;
+  padding:28px 40px;
+  text-align:center;
+  border-bottom:4px solid #2e7d32;
+}
+.top-bar h1{font-size:1.55rem;font-weight:700;margin-bottom:6px;letter-spacing:0.01em}
+.top-bar p{font-size:.9rem;opacity:.82;font-weight:400}
+
+/* ── Tab row ── */
+.tab-row{
+  background:#fff;
+  border-bottom:2px solid #c8e6c9;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:0;
+  padding:0 20px;
+}
+.tab-row button{
+  padding:14px 20px;
+  border:none;
+  background:transparent;
+  color:#555;
+  font-size:.88rem;
+  font-weight:500;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  margin-bottom:-2px;
+  white-space:nowrap;
+  font-family:'Segoe UI',Arial,sans-serif;
+  transition:all .18s;
+}
+.tab-row button.active{
+  color:#1b5e20;
+  border-bottom-color:#2e7d32;
+  background:#f4faf4;
+  font-weight:700;
+}
+.tab-row button:hover{background:#f4faf4;color:#2e7d32}
+.tab-row .divider{
+  width:1px;background:#e0f0e0;
+  margin:10px 4px;flex-shrink:0;
+}
+
+/* ── Wrapper ── */
+.wrap{max-width:1200px;margin:0 auto;padding:32px 32px 40px}
+.panel{display:none}.panel.show{display:block}
+
+/* ── Section label ── */
+.slabel{
+  font-size:.72rem;font-weight:700;
+  color:#2e7d32;text-transform:uppercase;
+  letter-spacing:.09em;
+  margin:28px 0 14px 2px;
+  display:flex;align-items:center;gap:8px;
+}
+.slabel::after{
+  content:'';flex:1;
+  height:1px;background:#c8e6c9;
+}
+
+/* ── Grids ── */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:1fr 1fr 1fr 1fr}
+
+/* ── Cards ── */
+.card{
+  background:#fff;
+  border:1px solid #c8e6c9;
+  border-radius:14px;
+  padding:22px 24px;
+  font-size:.88rem;
+  color:#2a3d2a;
+  line-height:1.7;
+}
+.card h3{
+  font-size:.95rem;font-weight:700;
+  color:#1b5e20;
+  margin-bottom:12px;
+  padding-bottom:8px;
+  border-bottom:1px solid #e8f5e9;
+}
+.card ul{padding-left:18px}
+.card li{margin-bottom:5px}
+.card p{margin-bottom:7px}
+
+.red-card{border-color:#ffcdd2;background:#fff8f8}
+.red-card h3{color:#b71c1c;border-bottom-color:#ffcdd2}
+.blue-card{border-color:#bbdefb;background:#f8fbff}
+.blue-card h3{color:#0d47a1;border-bottom-color:#bbdefb}
+
+/* ── Tables ── */
+.mt{
+  width:100%;border-collapse:collapse;
+  font-size:.84rem;margin-top:6px;
+}
+.mt th{
+  background:#1b5e20;color:#fff;
+  padding:8px 12px;text-align:left;
+  font-weight:600;font-size:.8rem;
+}
+.mt th:first-child{border-radius:6px 0 0 0}
+.mt th:last-child{border-radius:0 6px 0 0}
+.mt td{
+  padding:8px 12px;
+  border-bottom:1px solid #e8f5e9;
+  color:#2a3d2a;
+}
+.mt tr:nth-child(even) td{background:#f6fcf6}
+.val{font-weight:700;color:#1b5e20}
+.warn{color:#c62828;font-size:.78rem;font-weight:600;margin-top:8px}
+.ok{color:#1b5e20;font-size:.78rem;font-weight:600;margin-top:8px}
+
+/* ── Stage cards ── */
+.sc{
+  background:#fff;
+  border:1px solid #c8e6c9;
+  border-radius:14px;
+  padding:22px 16px;
+  text-align:center;
+}
+.sc .emo{font-size:26px;margin-bottom:6px}
+.sc .st{font-size:.9rem;font-weight:700;color:#1b5e20}
+.sc .dy{font-size:.75rem;color:#777;margin:3px 0 8px}
+.sc .mm{font-size:1.4rem;font-weight:800;color:#2e7d32;line-height:1.1}
+.sc .fr{font-size:.76rem;color:#555;margin-top:5px;padding:4px 10px;background:#f0faf0;border-radius:20px;display:inline-block}
+
+/* ── Method row ── */
+.mrow{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid #f0f8f0;
+  font-size:.86rem;color:#333;
+}
+.mrow:last-child{border-bottom:none}
+
+/* ── Note ── */
+.note{
+  background:#e8f5e9;border:1px solid #a5d6a7;
+  border-radius:10px;padding:10px 16px;
+  font-size:.82rem;color:#1b5e20;
+  margin-top:12px;text-align:center;font-weight:500;
+}
+
+/* ── Cost cards ── */
+.cc{
+  background:#fff;border:1px solid #c8e6c9;
+  border-radius:14px;padding:22px 18px;text-align:center;
+}
+.cc .ca{font-size:1.15rem;font-weight:800;color:#2e7d32;margin:6px 0 3px}
+.cc .cl{font-size:.76rem;color:#777}
+.badge{
+  display:inline-block;background:#e8f5e9;
+  color:#1b5e20;border-radius:20px;
+  padding:4px 12px;font-size:.75rem;
+  font-weight:600;margin-top:8px;
+}
+
+/* ── Sowing buttons ── */
+.sow-grid{
+  max-width:1200px;margin:0 auto;
+  padding:0 32px 40px;
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+}
+.sow-btn{
+  display:block;text-decoration:none;
+  background:#1b5e20;color:#fff;
+  border-radius:14px;padding:24px 28px;
+  text-align:center;
+  transition:background .18s,transform .1s;
+}
+.sow-btn:hover{background:#256427;transform:translateY(-2px)}
+.sow-btn .sow-ico{font-size:28px;margin-bottom:8px}
+.sow-btn .sow-title{font-size:1rem;font-weight:700;margin-bottom:5px}
+.sow-btn .sow-desc{font-size:.8rem;opacity:.85;line-height:1.5;margin-bottom:14px}
+.sow-view{display:inline-block;margin-top:4px;padding:7px 20px;background:#fff;color:#1b5e20;border-radius:8px;font-size:.82rem;font-weight:700;transition:background .15s}
+
+@media(max-width:700px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .wrap{padding:20px 16px 32px}
+  .sow-grid{grid-template-columns:1fr;padding:0 16px 28px}
+  .tab-row button{padding:11px 13px;font-size:.8rem}
+  .top-bar{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>🌾 Sugarcane Basal &amp; Irrigation Management</h1>
+  <p>Fertilizer · Water · Soil · Sowing — complete guide for farmers</p>
+</div>
+
+<div class="tab-row" id="tabs">
+  <button class="active" onclick="sw('p1',this)">Purpose &amp; Nutrients</button>
+  <button onclick="sw('p2',this)">Quantities &amp; Soil</button>
+  <button onclick="sw('p3',this)">Application &amp; Precautions</button>
+  <div class="divider"></div>
+  <button onclick="sw('p4',this)">💧 Stage-wise Water</button>
+  <button onclick="sw('p5',this)">Methods &amp; Costs</button>
+  <button onclick="sw('p6',this)">Soil Intervals</button>
+  <button onclick="sw('p7',this)">Irrigation Tips</button>
+</div>
+
+<div class="wrap">
+
+  <!-- P1 -->
+  <div id="p1" class="panel show">
+    <div class="slabel">Purpose of basal dose</div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>🎯 Why apply basal dose?</h3>
+        <ul>
+          <li>Supplies nutrients for early growth</li>
+          <li>Promotes root establishment</li>
+          <li>Improves sprouting &amp; tillering</li>
+          <li>Enhances nutrient uptake efficiency</li>
+          <li>Reduces early nutrient stress</li>
+          <li>Improves final yield &amp; quality</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🔬 6 key macronutrients</h3>
+        <table class="mt">
+          <tr><th>Nutrient</th><th>Key role</th></tr>
+          <tr><td><b>N – Nitrogen</b></td><td>Vegetative growth, leaf area</td></tr>
+          <tr><td><b>P – Phosphorus</b></td><td>Root development, energy transfer</td></tr>
+          <tr><td><b>K – Potassium</b></td><td>Stalk strength, sugar storage</td></tr>
+          <tr><td><b>Ca – Calcium</b></td><td>Soil structure, root support</td></tr>
+          <tr><td><b>Mg – Magnesium</b></td><td>Chlorophyll, photosynthesis</td></tr>
+          <tr><td><b>S – Sulphur</b></td><td>Protein synthesis, N efficiency</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- P2 -->
+  <div id="p2" class="panel">
+    <div class="slabel">General quantities per acre</div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>📊 Nutrient quantities</h3>
+        <table class="mt">
+          <tr><th>Component</th><th>Quantity</th><th>Note</th></tr>
+          <tr><td>Nitrogen (N)</td><td class="val">24–27 kg</td><td>30–40% as basal</td></tr>
+          <tr><td>Phosphorus (P₂O₅)</td><td class="val">16–24 kg</td><td>Full dose basal</td></tr>
+          <tr><td>Potassium (K₂O)</td><td class="val">16–24 kg</td><td>Split application</td></tr>
+          <tr><td>FYM / Compost</td><td class="val">3–4 tons</td><td>Before planting</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>⚫ Black soil</h3>
+        <table class="mt">
+          <tr><th>Nutrient</th><th>Qty/acre</th></tr>
+          <tr><td>N</td><td>123–148 kg</td></tr>
+          <tr><td>P₂O₅</td><td>148 kg</td></tr>
+          <tr><td>K₂O</td><td>123–148 kg</td></tr>
+          <tr><td>FYM</td><td>3.2–4 tons</td></tr>
+        </table>
+        <p class="warn">⚠️ Avoid excess nitrogen in black soil</p>
+      </div>
+      <div class="card">
+        <h3>🔴 Red soil</h3>
+        <table class="mt">
+          <tr><th>Nutrient</th><th>Qty/acre</th></tr>
+          <tr><td>N</td><td>148–173 kg</td></tr>
+          <tr><td>P₂O₅</td><td>148–173 kg</td></tr>
+          <tr><td>K₂O</td><td>99–124 kg</td></tr>
+          <tr><td>FYM</td><td>4–4.9 tons</td></tr>
+        </table>
+        <p class="warn">⚠️ Organic manure is compulsory</p>
+      </div>
+      <div class="card">
+        <h3>🟡 Medium brown soil</h3>
+        <table class="mt">
+          <tr><th>Nutrient</th><th>Qty/acre</th></tr>
+          <tr><td>N</td><td>173 kg</td></tr>
+          <tr><td>P₂O₅</td><td>148–173 kg</td></tr>
+          <tr><td>K₂O</td><td>124 kg</td></tr>
+          <tr><td>FYM</td><td>4–4.9 tons</td></tr>
+        </table>
+        <p class="ok">✔️ Standard recommendation suitable</p>
+      </div>
+      <div class="card" style="grid-column:span 2">
+        <h3>🟤 Dark brown soil</h3>
+        <table class="mt">
+          <tr><th>Nutrient</th><th>Qty/acre</th></tr>
+          <tr><td>N</td><td>136–148 kg</td></tr>
+          <tr><td>P₂O₅</td><td>148–173 kg</td></tr>
+          <tr><td>K₂O</td><td>148–173 kg</td></tr>
+          <tr><td>FYM</td><td>4–4.9 tons</td></tr>
+        </table>
+        <p class="ok">✔️ Responds well to organic + inorganic combination</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- P3 -->
+  <div id="p3" class="panel">
+    <div class="slabel">Timing &amp; method</div>
+    <div class="grid g3">
+      <div class="card">
+        <h3>🕐 When to apply</h3>
+        <p>2–3 weeks before planting or at planting time. Mixes nutrients with soil, prevents burn, ensures availability during germination.</p>
+      </div>
+      <div class="card">
+        <h3>📍 Where to apply</h3>
+        <ul>
+          <li>Apply in furrows or beds</li>
+          <li>Place near root zone</li>
+          <li>Mix lightly with soil</li>
+          <li>Keep distance from setts</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>⚙️ How to apply</h3>
+        <ul>
+          <li>Conduct soil testing first</li>
+          <li>Moisten soil if dry</li>
+          <li>Apply uniformly in furrows</li>
+          <li>Mix gently &amp; plant setts</li>
+          <li>Apply light irrigation after</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slabel">Precautions</div>
+    <div class="grid g3">
+      <div class="card red-card">
+        <h3>❌ Don'ts</h3>
+        <ul>
+          <li>Don't apply on dry soil</li>
+          <li>Don't let fertilizer touch buds</li>
+          <li>Don't apply excess nitrogen</li>
+          <li>Don't ignore soil testing</li>
+          <li>Don't apply in waterlogged conditions</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>✅ Do's</h3>
+        <ul>
+          <li>Apply on moist soil</li>
+          <li>Mix fertilizer properly with soil</li>
+          <li>Place near root zone</li>
+          <li>Follow soil test recommendations</li>
+          <li>Ensure uniform distribution</li>
+        </ul>
+      </div>
+      <div class="card blue-card">
+        <h3>🎯 Benefits</h3>
+        <ul>
+          <li>Saves 40–60% water</li>
+          <li>Increases cane yield</li>
+          <li>Improves sugar content</li>
+          <li>Reduces labor costs</li>
+          <li>Ensures uniform growth</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- P4 -->
+  <div id="p4" class="panel">
+    <div class="slabel">Water requirement by growth stage</div>
+    <div class="grid g4">
+      <div class="sc"><div class="emo">🌱</div><div class="st">Germination</div><div class="dy">0–45 days</div><div class="mm">~300 mm</div><div class="fr">Every 5–7 days</div></div>
+      <div class="sc"><div class="emo">🌿</div><div class="st">Tillering</div><div class="dy">45–120 days</div><div class="mm">~550 mm</div><div class="fr">Every 6–10 days</div></div>
+      <div class="sc"><div class="emo">🚀</div><div class="st">Grand Growth</div><div class="dy">120–270 days</div><div class="mm">~1000 mm</div><div class="fr">Every 7–12 days</div></div>
+      <div class="sc"><div class="emo">🍬</div><div class="st">Maturation</div><div class="dy">270–360 days</div><div class="mm">~650 mm</div><div class="fr">Every 12–15 days</div></div>
+    </div>
+    <div class="slabel">Scheduling tips</div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>🌱 Germination &amp; Tillering</h3>
+        <p><b>Germination:</b> Light, frequent irrigation. Keep soil moist. Avoid excess water to prevent sett rot.</p>
+        <p><b>Tillering:</b> Moderate irrigation promotes healthy tillers. Water stress reduces cane population.</p>
+      </div>
+      <div class="card">
+        <h3>🚀 Grand Growth &amp; Maturation</h3>
+        <p><b>Grand Growth:</b> Most critical stage — highest water demand. Moisture stress significantly reduces yield.</p>
+        <p><b>Maturation:</b> Reduce irrigation. Limited water aids sugar accumulation and improves sweetness.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- P5 -->
+  <div id="p5" class="panel">
+    <div class="slabel">Irrigation method efficiency</div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>🚿 Method comparison</h3>
+        <div class="mrow"><span>💧 Flood irrigation</span><span style="color:#e53935;font-weight:600">30–40% &nbsp;⭐</span></div>
+        <div class="mrow"><span>💧 Furrow irrigation</span><span style="color:#fb8c00;font-weight:600">50–60% &nbsp;⭐⭐</span></div>
+        <div class="mrow"><span>☔ Sprinkler</span><span style="color:#43a047;font-weight:600">70–80% &nbsp;⭐⭐⭐</span></div>
+        <div class="mrow"><span style="font-weight:700;color:#1b5e20">💧 Drip irrigation</span><span style="color:#1b5e20;font-weight:700">85–95% &nbsp;⭐⭐⭐⭐⭐</span></div>
+        <div class="note">💡 Use drip irrigation — saves 40–60% water!</div>
+      </div>
+      <div class="card">
+        <h3>📌 Method summary</h3>
+        <p><b>Flood:</b> Traditional, low cost, very low efficiency. Leads to waterlogging and nutrient leaching.</p>
+        <p><b>Furrow:</b> Better control, moderate cost. Suitable for flat land.</p>
+        <p><b>Sprinkler:</b> Good distribution, works on uneven terrain. Higher setup cost.</p>
+        <p><b>Drip:</b> Best option. Delivers water directly to root zone. Maximum savings.</p>
+      </div>
+    </div>
+    <div class="slabel">System installation costs</div>
+    <div class="grid g3">
+      <div class="cc">
+        <div style="font-size:28px;margin-bottom:6px">💧</div>
+        <div style="font-size:.92rem;font-weight:700;color:#1b5e20;margin-bottom:4px">Drip Irrigation</div>
+        <div class="ca">₹45,000 – 60,000</div>
+        <div class="cl">per acre</div>
+        <div class="cl" style="margin-top:4px">₹11,250 – 15,000 / 10 Guntha</div>
+      </div>
+      <div class="cc">
+        <div style="font-size:28px;margin-bottom:6px">☔</div>
+        <div style="font-size:.92rem;font-weight:700;color:#1b5e20;margin-bottom:4px">Sprinkler</div>
+        <div class="ca">₹40,000 – 60,000</div>
+        <div class="cl">per acre</div>
+        <div class="cl" style="margin-top:4px">₹10,000 – 15,000 / 10 Guntha</div>
+      </div>
+      <div class="cc">
+        <div style="font-size:28px;margin-bottom:6px">🎁</div>
+        <div style="font-size:.92rem;font-weight:700;color:#1b5e20;margin-bottom:4px">Govt Subsidy</div>
+        <div class="ca">25 – 50%</div>
+        <div class="cl">on both systems</div>
+        <span class="badge">Apply via agriculture dept.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- P6 -->
+  <div id="p6" class="panel">
+    <div class="slabel">Irrigation interval by soil type</div>
+    <div class="grid g3">
+      <div class="card">
+        <h3>⚫ Black Soil</h3>
+        <p style="font-size:.8rem;margin-bottom:8px"><b>Water holding:</b> Very High</p>
+        <table class="mt">
+          <tr><th>Stage</th><th>Interval</th></tr>
+          <tr><td>Germination</td><td>8–10 days</td></tr>
+          <tr><td>Tillering</td><td>10–12 days</td></tr>
+          <tr><td>Grand Growth</td><td>7–10 days</td></tr>
+          <tr><td>Maturity</td><td>12–15 days</td></tr>
+        </table>
+        <p class="ok">✅ Less frequent irrigation needed</p>
+      </div>
+      <div class="card">
+        <h3>🔴 Red Soil</h3>
+        <p style="font-size:.8rem;margin-bottom:8px"><b>Water holding:</b> Low</p>
+        <table class="mt">
+          <tr><th>Stage</th><th>Interval</th></tr>
+          <tr><td>Germination</td><td>5–6 days</td></tr>
+          <tr><td>Tillering</td><td>6–8 days</td></tr>
+          <tr><td>Grand Growth</td><td>6–7 days</td></tr>
+          <tr><td>Maturity</td><td>8–10 days</td></tr>
+        </table>
+        <p class="warn">⚠️ Frequent irrigation needed</p>
+      </div>
+      <div class="card">
+        <h3>🟤 Brown Soil</h3>
+        <p style="font-size:.8rem;margin-bottom:8px"><b>Water holding:</b> Medium</p>
+        <table class="mt">
+          <tr><th>Stage</th><th>Interval</th></tr>
+          <tr><td>Germination</td><td>6–8 days</td></tr>
+          <tr><td>Tillering</td><td>8–10 days</td></tr>
+          <tr><td>Grand Growth</td><td>7–9 days</td></tr>
+          <tr><td>Maturity</td><td>10–12 days</td></tr>
+        </table>
+        <p class="ok">✅ Balanced approach</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- P7 -->
+  <div id="p7" class="panel">
+    <div class="slabel">Irrigation precautions</div>
+    <div class="grid g3">
+      <div class="card red-card">
+        <h3>❌ Avoid</h3>
+        <ul>
+          <li>Over-irrigation / waterlogging</li>
+          <li>Hot afternoon watering</li>
+          <li>Irregular schedules</li>
+          <li>Using saline water</li>
+          <li>Excess water during ripening</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>✅ Follow</h3>
+        <ul>
+          <li>Irrigate in early morning</li>
+          <li>Monitor soil moisture</li>
+          <li>Maintain consistent schedule</li>
+          <li>Use quality water</li>
+          <li>Reduce water during ripening</li>
+        </ul>
+      </div>
+      <div class="card blue-card">
+        <h3>💡 Best Practices</h3>
+        <ul>
+          <li>Use soil moisture sensors if possible</li>
+          <li>Combine drip with fertigation</li>
+          <li>Inspect drip lines regularly</li>
+          <li>Keep drainage channels clear</li>
+          <li>Record irrigation dates</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Sowing buttons -->
+<div class="sow-grid">
+  <a href="/normalPlanting" class="sow-btn">
+    <div class="sow-ico">🌾</div>
+    <div class="sow-title">Normal Sowing</div>
+    <div class="sow-desc">Traditional method — setts directly planted in the main field</div>
+    <div class="sow-view">View Details →</div>
+  </a>
+  <a href="/nurseryPlanting" class="sow-btn">
+    <div class="sow-ico">🌱</div>
+    <div class="sow-title">Nursery Sowing</div>
+    <div class="sow-desc">Modern approach — seedlings prepared in nursery then transplanted</div>
+    <div class="sow-view">View Details →</div>
+  </a>
+</div>
+<script>
+    function openModal()     { document.getElementById("modalOverlay").style.display = "flex"; }
+    function closeModal()    { document.getElementById("modalOverlay").style.display = "none"; }
+    function openEstimate()  { document.getElementById("EstimateOverlay").style.display = "flex"; }
+    function closeEstimate() { document.getElementById("EstimateOverlay").style.display = "none"; }
+    function openNext()      { document.getElementById("nextOverlay").style.display = "flex"; }
+    function closeNext()     { document.getElementById("nextOverlay").style.display = "none"; }
+    function NextStage()     { window.location.href = "/stage2"; }
+
+    document.getElementById("estimateForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        fetch("/normalPlanting", { method: "Post", body: formData })
+            .then(function(respone) { return respone.text(); })
+            .then(function(result) { document.getElementById("estimateID").innerText = result; })
+            .catch(err => console.error(err));
+    });
+
+    document.getElementById("emailReminderForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        fetch("/normalPlanting/reminder", { method: "POST", body: formData })
+            .then(function(respone) { return respone.text(); })
+            .then(function(result) { document.getElementById("emailReminderResult").innerText = result; })
+            .catch(err => console.error(err));
+    });
+
+    window.chatbotConfig = {
+        position: "top-right",
+        preprompt: "User is on sugarcane planting stage page. Answer only about planting, spacing, irrigation, fertilizers."
+    };
+    function sw(id, btn) {
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('show'); });
+    document.querySelectorAll('.tab-row button').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById(id).classList.add('show');
+    btn.classList.add('active');
+}
+</script>
+</body>
+</html>

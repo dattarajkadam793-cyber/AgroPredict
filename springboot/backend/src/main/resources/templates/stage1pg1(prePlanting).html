@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stage 1 </title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+html, body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100vh;
+    overflow:hidden;
+    font-family:Arial, sans-serif;
+    background:url("bg.jpg") no-repeat center center fixed;
+    background-size:cover;
+}
+
+/* MAIN CONTAINER */
+.container{
+    width:90%;
+    max-width:900px;
+    margin:40px auto;
+    background:rgba(255,255,255,0.95);
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    padding:25px;
+}
+.blur{ filter:blur(4px); }
+
+/* STEP BOX */
+.step-box{
+    border-left:8px solid #2e7d32;
+    padding:20px;
+    margin:20px 0;
+    font-size:22px;
+    cursor:pointer;
+    border-radius:10px;
+    background:#f9fff9;
+    font-family:'Poppins', sans-serif;
+}
+.step-box:hover{ background:#e8f5e9; }
+
+/* NEXT BUTTON */
+.next-btn{
+    display:block;
+    margin:30px auto 0;
+    padding:12px 40px;
+    font-size:18px;
+    border-radius:25px;
+    border:2px solid #2e7d32;
+    background:white;
+    cursor:pointer;
+    font-family:'Poppins', sans-serif;
+}
+.next-btn:hover{
+    background:#2e7d32;
+    color:white;
+}
+
+/* OVERLAY */
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:10;
+}
+
+/* DETAIL BOX */
+.detail-box{
+    width:85%;
+    max-width:900px;
+    background:white;
+    border-radius:15px;
+    max-height:85vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+/* HEADER */
+.detail-header{
+    background:#2e7d32;
+    color:white;
+    padding:15px;
+    text-align:center;
+    font-family:'Poppins', sans-serif;
+    position:relative;
+}
+
+.close-x{
+    position:absolute;
+    top:12px;
+    right:15px;
+    font-size:22px;
+    cursor:pointer;
+    color:white;
+    font-weight:bold;
+}
+
+.close-x:hover{
+    color:#ffcccc;
+}
+
+/* CONTENT */
+.detail-content{
+    padding:20px;
+    overflow-y:auto;
+    text-align:center;
+}
+
+/* INFO CARD */
+.info-card{
+    background:#f1f8e9;
+    border-left:6px solid #2e7d32;
+    padding:18px;
+    border-radius:8px;
+    font-size:17px;
+    line-height:1.7;
+    text-align:left;
+    margin-bottom:20px;
+}
+
+/* VIDEOS */
+.single-video{
+    max-width:360px;
+    margin:20px auto;
+}
+
+.video-row{
+    display:flex;
+    gap:25px;
+    justify-content:center;
+}
+
+.video-box{
+    flex:1;
+    max-width:48%;
+}
+
+.video-box h3{
+    color:#2e7d32;
+}
+
+.thumbnail{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 6px 15px rgba(0,0,0,0.3);
+    cursor:pointer;
+}
+.thumbnail img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.play{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:40px;
+    color:white;
+    background:rgba(0,0,0,0.6);
+    border-radius:50%;
+    padding:6px 12px;
+}
+
+/* CLOSE BUTTON */
+.close-btn{
+    margin-top:20px;
+    padding:10px 25px;
+    border-radius:25px;
+    border:2px solid #2e7d32;
+    background:white;
+    cursor:pointer;
+    font-family:'Poppins', sans-serif;
+}
+.close-btn:hover{
+    background:#2e7d32;
+    color:white;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .video-row{ flex-direction:column; }
+    .video-box{ max-width:100%; }
+}
+
+
+/* dattaraj*/
+
+
+
+
+/* Chat Button */
+#chatBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #00ffbf;
+  color: rgb(255, 0, 0);
+  border: none;
+  padding: 15px 18px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Chatbox */
+#chatbox {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 320px;
+  height: 420px;
+  
+  background: #ffffff;
+
+  /* 🔥 THIS is what you want */
+  border: 2px solid #e0e0e0;     /* visible border */
+  border-radius: 16px;           /* smooth rounded corners */
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25); /* depth */
+
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  z-index: 1000;
+}
+
+/* Header */
+#chatHeader {
+  background: #4CAF50;
+  color: white;
+  padding: 12px 15px;
+  font-weight: bold;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* rounded top corners */
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+/* Close button */
+#chatHeader span {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Chat Body */
+#chatBody {
+  height: 300px;
+  padding: 12px;
+  overflow-y: auto;
+  background: #f7f7f7;
+}
+
+/* Input section */
+#chatInput {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+/* Input */
+#chatInput input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+/* Send button */
+#chatInput button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MAIN SCREEN -->
+<div class="container" id="mainScreen">
+<h1 style="text-align:center;color:green;font-family:'Poppins', sans-serif;">🌱 Stage 1 : Germination</h1>
+<h3 style="text-align:center;font-family:'Poppins', sans-serif;">(Making Farmland Ready)</h3>
+
+<div class="step-box" onclick="openStep(1)">🚜 Step 1 : Ploughing</div>
+<div class="step-box" onclick="openStep(2)">🧹 Step 2 : Hoeing / Weeding</div>
+<div class="step-box" onclick="openStep(3)">💧 Step 3 : Furrow Making System</div>
+
+<button class="next-btn" onclick="goNextPage()">Next Stage</button>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay">
+<div class="detail-box">
+
+<div class="detail-header">
+<h2 id="stepTitle"></h2>
+<span class="close-x" onclick="closeDetail()">✖</span>
+</div>
+
+<div class="detail-content">
+<div class="info-card" id="stepInfo"></div>
+<div id="videoArea"></div>
+</div>
+
+</div>
+</div>
+
+<!-- ================= HIDDEN CONTENT ================= -->
+
+<div id="content1" style="display:none;">
+<!-- SAME Step 1 content -->
+<b>Why:</b>
+<ul>
+<li>To loosen hard and compact soil.</li>
+<li>To prepare land for sowing seeds.</li>
+<li>To remove weeds and unwanted plants.</li>
+<li>To mix crop residues and organic matter with soil.</li>
+<li>To expose harmful insects and pests.</li>
+</ul>
+
+<b>How:</b>
+<ul>
+<li>Soil is turned and broken using a plough.</li>
+<li>Traditional ploughs are drawn by bullocks.</li>
+<li>Modern ploughing is done using tractors.</li>
+<li>Cultivators and disc ploughs are also used.</li>
+<li>Ploughing is done before sowing.</li>
+</ul>
+
+<b>Importance:</b>
+<ul>
+<li>Improves soil aeration and water-holding capacity.</li>
+<li>Helps roots grow deeper and stronger.</li>
+<li>Enhances soil fertility and nutrient availability.</li>
+<li>Controls weeds and pests.</li>
+<li>Increases crop yield and productivity.</li>
+</ul>
+</div>
+
+<div id="video1" style="display:none;">
+<h3>Working of Ploughing</h3>
+<div class="single-video">
+<div class="thumbnail" onclick="window.open('https://youtu.be/-WmuID3v_2U')">
+<img src="https://img.youtube.com/vi/-WmuID3v_2U/hqdefault.jpg">
+<div class="play">▶</div>
+</div>
+</div>
+</div> 
+
+<!-- STEP 2 -->
+<div id="content2" style="display:none;">
+<b>Why:</b>
+<ul>
+<li>To remove weeds competing with crops.</li>
+<li>To reduce competition for nutrients and water.</li>
+<li>To break hard crust on top soil.</li>
+<li>To conserve soil moisture.</li>
+<li>To improve crop growth.</li>
+</ul>
+
+<b>How:</b>
+<ul>
+<li>Weeds are uprooted using a hoe.</li>
+<li>Top soil is loosened during hoeing.</li>
+<li>Hand tools are used in small fields.</li>
+<li>Mechanical weeders are used in large fields.</li>
+<li>Hoeing is done at regular intervals.</li>
+</ul>
+
+<b>Importance:</b>
+<ul>
+<li>Improves soil aeration and root respiration.</li>
+<li>Reduces weed population effectively.</li>
+<li>Helps better absorption of water and nutrients.</li>
+<li>Promotes healthy plant growth.</li>
+<li>Increases crop yield.</li>
+</ul>
+</div>
+
+<div id="video2" style="display:none;">
+<h3>Working of Hoeing using different methods</h3>
+<div class="video-row">
+
+<div class="video-box">
+<h3>Traditional Method</h3>
+<div class="thumbnail" onclick="window.open('https://youtu.be/XPOrg1_Tq24')">
+<img src="https://img.youtube.com/vi/XPOrg1_Tq24/hqdefault.jpg">
+<div class="play">▶</div>
+</div>
+</div>
+
+<div class="video-box">
+<h3>Modern Method</h3>
+<div class="thumbnail" onclick="window.open('https://youtu.be/PeHT8m1FxBc')">
+<img src="https://img.youtube.com/vi/PeHT8m1FxBc/hqdefault.jpg">
+<div class="play">▶</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- STEP 3 -->
+<div id="content3" style="display:none;">
+<b>Why:</b>
+<ul>
+<li>To create proper rows for planting.</li>
+<li>To ensure efficient irrigation.</li>
+<li>To maintain proper spacing between plants.</li>
+<li>To prevent waterlogging.</li>
+<li>To improve crop management.</li>
+</ul>
+
+<b>How:</b>
+<ul>
+<li>Furrows are formed using a ridger or plough.</li>
+<li>Tractors or bullocks are used for operation.</li>
+<li>Soil is pushed aside to form ridges and furrows.</li>
+<li>Crops are planted on ridges or in furrows.</li>
+<li>Furrows are made before sowing or planting.</li>
+</ul>
+
+<b>Importance:</b>
+<ul>
+<li>Ensures uniform distribution of irrigation water.</li>
+<li>Provides proper drainage of excess water.</li>
+<li>Improves root development and nutrient uptake.</li>
+<li>Useful for crops like sugarcane and vegetables.</li>
+<li>Increases crop productivity and yield.</li>
+</ul>
+</div>
+
+<div id="video3" style="display:none;">
+<h3>Working of Furrow Making System</h3>
+<div class="single-video">
+<div class="thumbnail" onclick="window.open('https://youtu.be/tEAwlENzb4w')">
+<img src="https://img.youtube.com/vi/tEAwlENzb4w/hqdefault.jpg">
+<div class="play">▶</div>
+</div>
+</div>
+</div>
+
+<!-- chatbot dattar -->
+<button id="chatBtn" onclick="toggleChat()">💬</button>
+
+<div id="chatbox">
+  <div id="chatHeader">
+    Agro Predict Bot 🌱
+    <span onclick="toggleChat()">✖</span>
+  </div>
+
+  <div id="chatBody">
+    <p>👋 Hi! Ask me anything.</p>
+  </div>
+
+  <div id="chatInput">
+    <input type="text" placeholder="Type a message..." />
+    <button>➤</button>
+  </div>
+</div>
+
+
+<script>
+function openStep(step){
+    overlay.style.display="flex";
+    mainScreen.classList.add("blur");
+
+    if(step===1){
+        stepTitle.innerText="🚜 Step 1 : Ploughing";
+        stepInfo.innerHTML=document.getElementById("content1").innerHTML;
+        videoArea.innerHTML=document.getElementById("video1").innerHTML;
+    }
+
+    if(step===2){
+        stepTitle.innerText="🧹 Step 2 : Hoeing / Weeding";
+        stepInfo.innerHTML=document.getElementById("content2").innerHTML;
+        videoArea.innerHTML=document.getElementById("video2").innerHTML;
+    }
+
+    if(step===3){
+        stepTitle.innerText="💧 Step 3 : Furrow Making System";
+        stepInfo.innerHTML=document.getElementById("content3").innerHTML;
+        videoArea.innerHTML=document.getElementById("video3").innerHTML;
+    }
+}
+
+function closeDetail(){
+    overlay.style.display="none";
+    mainScreen.classList.remove("blur");
+}
+
+function goNextPage(){
+    window.location.href="/stage1pg2basalWater";
+}
+
+
+
+
+</script>
+<!-- chatbot -->
+<script>
+window.chatbotConfig = {
+    position: "top-right",
+    preprompt: "User is on sugarcane tillering stage page. Answer only about sugarcane stage 2 tillering."
+};
+
+    // chatbot
+function toggleChat() {
+  const chatbox = document.getElementById("chatbox");
+
+  if (chatbox.style.display === "block") {
+    chatbox.style.display = "none";
+  } else {
+    chatbox.style.display = "block";
+  }
+}
+</script>
+<link rel="stylesheet" href="/css/chatBotcss.css">
+<script src="/js/chatBotjs.js"></script>
+
+
+
+</body>
+</html>
