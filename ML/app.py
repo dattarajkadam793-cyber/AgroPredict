@@ -4,16 +4,12 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# =========================================================
-# LOAD MODELS
-# =========================================================
+
 crop_model = joblib.load("cropPredModel.pkl")
 harvest_model, harvest_scaler = joblib.load("harvestModel.pkl")
 
 
-# =========================================================
-# CROP API (FIXED VERSION)
-# =========================================================
+
 @app.route('/predict', methods=['POST'])
 def predict():
     print("🔥 CROP API HIT")
@@ -25,16 +21,16 @@ def predict():
         return jsonify({"error": "No JSON received"}), 400
 
     try:
-        # ✅ Read inputs (match exact names expected)
+        
         soil_color = data['soilColor']
         N = float(data['Nitrogen'])
         P = float(data['Phosphorus'])
-        K = float(data['Potassium'])   # ✅ FIXED CASE
+        K = float(data['Potassium'])  
         ph = float(data['pH'])
         rainfall = float(data['Rainfall'])
         temp = float(data['Temperature'])
 
-        # ✅ Create dataframe EXACTLY like training
+        
         df = pd.DataFrame({
             'Nitrogen': [N],
             'Phosphorus': [P],
@@ -42,23 +38,23 @@ def predict():
             'pH': [ph],
             'Rainfall': [rainfall],
             'Temperature': [temp],
-            'Soil_color': [soil_color]   # ✅ keep raw, encode later
+            'Soil_color': [soil_color]   
         })
 
-        # ✅ Apply SAME encoding as training
+       
         df = pd.get_dummies(df, columns=['Soil_color'])
 
-        # ✅ Ensure all expected columns exist
+        
         for col in crop_model.feature_names_in_:
             if col not in df:
                 df[col] = 0
 
-        # ✅ Ensure correct column order
+        
         df = df[crop_model.feature_names_in_]
 
         print("Final features:", df)
 
-        # ✅ Predict
+        
         prediction = crop_model.predict(df)[0]
 
         crop_map = {
@@ -74,9 +70,7 @@ def predict():
         return jsonify({"error": str(e)}), 500
 
 
-# =========================================================
-# HARVEST API (ALREADY GOOD, MINOR CLEANUP)
-# =========================================================
+
 @app.route('/harvestPredict', methods=['POST'])
 def harvest_predict():
     print("🔥 HARVEST API HIT")
@@ -100,7 +94,7 @@ def harvest_predict():
 
         print("Before scaling:", sample)
 
-        # ✅ Use numpy array for scaler (safe)
+      
         sample_scaled = harvest_scaler.transform(sample.values)
 
         print("After scaling:", sample_scaled)
@@ -121,8 +115,6 @@ def harvest_predict():
         return jsonify({"error": str(e)}), 500
 
 
-# =========================================================
-# RUN APP
-# =========================================================
+
 if __name__ == "__main__":
     app.run(debug=True)
